@@ -75,8 +75,8 @@ class Thread(object):
         t._last_modified = res.headers['last-modified']
 
         posts = json.loads(res.text)['posts']
-        t.topic = Post.fromDict(t, posts[0])
-        t.replies.extend(Post.fromDict(t, p) for p in posts[1:])
+        t.topic = Post(t, posts[0])
+        t.replies.extend(Post(t, p) for p in posts[1:])
 
         if not t.replies:
             t.last_reply_id = t.topic.PostNumber
@@ -84,6 +84,15 @@ class Thread(object):
             t.last_reply_id = t.replies[-1].PostNumber
 
         return t
+
+    def Files(self):
+        """
+            Returns a generator that yields all the URL of all the files in the thread.
+        """
+        yield self.topic.FileUrl
+        for reply in self.replies:
+            if reply.HasFile:
+                yield reply.FileUrl
 
     def update(self):
         """
@@ -98,7 +107,7 @@ class Thread(object):
         posts = json.loads(res.text)['posts']
 
         originalPostCount = len(self.replies)
-        self.replies.extend(Post.fromDict(self, p) for p in posts if p['no'] > self.last_reply_id)
+        self.replies.extend(Post(self, p) for p in posts if p['no'] > self.last_reply_id)
         newPostCount = len(self.replies)
 
         return newPostCount - originalPostCount
@@ -222,13 +231,12 @@ class Post(object):
         return 'filename' in self._data
 
     @property
-    def FileObject(self):
-        return self._thread._board._requestsSession.get(self.FileUrl).raw
+    def FileRequest(self):
+        return self._thread._board._requestsSession.get(self.FileUrl)
 
-    @staticmethod
-    def fromDict(thread, data):
-        p = Post(thread, data)
-        return p
+    @property
+    def ThumbnailRequest(self):
+        return self._thread._board._requestsSession.get(self.ThumbnailUrl)
 
     def __repr__(self):
         return "<Post /%s/%i#%i, hasFile: %r>" % (

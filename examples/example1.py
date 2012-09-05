@@ -14,7 +14,7 @@ def main():
     print 'PostNumber', topic.PostNumber
     print 'Timestamp',  topic.Timestamp
     print 'DateTime',   repr(topic.Datetime)
-    print 'FileMd5hex', topic.FileMd5Hex
+    print 'FileMd5Hex', topic.FileMd5Hex
     print 'FileUrl',    topic.FileUrl
     print 'Subject',    topic.Subject
     print 'Comment',    topic.Comment
