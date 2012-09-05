@@ -47,7 +47,7 @@ class Board(object):
             raise
 
     @property
-    def name(self):
+    def Name(self):
         return self._boardName
 
 
@@ -105,7 +105,7 @@ class Thread(object):
 
     def __repr__(self):
         return '<Thread /%s/%i, %i replies>' % (
-            self._board.name, self.id, len(self.replies)
+            self._board.Name, self.id, len(self.replies)
         )
 
 
@@ -170,7 +170,7 @@ class Post(object):
         return '%s://%s/%s/src/%i%s' % (
             'https' if board._https else 'http',
             _4CHAN_IMAGES_URL,
-            board.name,
+            board.Name,
             self._data['tim'],
             self._data['ext']
         )
@@ -213,7 +213,7 @@ class Post(object):
         return '%s://%s/%s/thumb/%is.jpg' % (
             'https' if board._https else 'http',
             _4CHAN_THUMBS_URL,
-            board.name,
+            board.Name,
             self._data['tim']
         )
 
@@ -232,29 +232,8 @@ class Post(object):
 
     def __repr__(self):
         return "<Post /%s/%i#%i, hasFile: %r>" % (
-            self._thread._board.name,
+            self._thread._board.Name,
             self._thread.id,
             self.PostNumber,
             self.HasFile
         )
-
-
-
-if __name__ == '__main__':
-    v = Board('v')
-    thread = v.getThread(152900882)
-    print thread
-    print thread.Sticky
-    print thread.Closed
-    print thread.update()
-    topic = thread.topic
-    print topic
-    print topic.Timestamp
-    print topic.Datetime
-    print topic.FileMd5Hex
-    print topic.FileUrl
-    print topic.Subject
-    print topic.Comment
-    print topic.ThumbnailUrl
-
-    print topic.FileObject.read()
