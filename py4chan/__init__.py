@@ -6,7 +6,6 @@
 
 """
 import requests
-import json
 from datetime import datetime
 import base64
 
@@ -34,17 +33,17 @@ class Board(object):
 
             return thread
 
-        try:
-            url = '%s/%s' % (self._baseUrl, _THREAD % (self._boardName, id))
-            res = self._requestsSession.get(url)
+        url = '%s/%s' % (self._baseUrl, _THREAD % (self._boardName, id))
+        res = self._requestsSession.get(url)
 
-            thread = Thread.fromRequest(self, res, id)
-            self._threadCache[id] = thread
+        thread = Thread.fromRequest(self, res, id)
+        self._threadCache[id] = thread
 
-            return thread
+        return thread
 
-        except:
-            raise
+    def threadExists(self, id):
+        url = '%s/%s' % (self._baseUrl, _THREAD % (self._boardName, id))
+        return self._requestsSession.head(url).status_code == 200
 
     @property
     def Name(self):
@@ -71,14 +70,14 @@ class Thread(object):
 
     @staticmethod
     def fromRequest(board, res, id):
-        if res.status == 404:
+        if res.status_code == 404:
             return None
 
-        if res.status == 200:
+        elif res.status_code == 200:
             t = Thread(board, id)
             t._last_modified = res.headers['last-modified']
 
-            posts = json.loads(res.text)['posts']
+            posts = res.json['posts']
             t.topic = Post(t, posts[0])
             t.replies.extend(Post(t, p) for p in posts[1:])
 
@@ -89,7 +88,8 @@ class Thread(object):
 
             return t
 
-        # TODO: Raise Exception
+        else:
+            res.raise_for_status()
 
     def Files(self):
         """
@@ -112,16 +112,16 @@ class Thread(object):
             'If-Modified-Since': self._last_modified
         })
 
-        if res.status == 304:
+        if res.status_code == 304:
             return 0
 
-        elif res.status == 404:
+        elif res.status_code == 404:
             self.is_404 = True
             return 0
 
-        elif res.status == 200:
+        elif res.status_code == 200:
             self._last_modified = res.headers['last-modified']
-            posts = json.loads(res.text)['posts']
+            posts = res.json['posts']
 
             originalPostCount = len(self.replies)
             self.replies.extend(Post(self, p) for p in posts if p['no'] > self.last_reply_id)
@@ -135,8 +135,7 @@ class Thread(object):
             return postCountDelta
 
         else:
-            # TODO: Raise Exception...
-            return 0
+            res.raise_for_status()
 
     def __repr__(self):
         return '<Thread /%s/%i, %i replies>' % (
