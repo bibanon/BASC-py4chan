@@ -13,13 +13,14 @@ _4CHAN_API = 'api.4chan.org'
 _4CHAN_IMAGES_URL = 'images.4chan.org'
 _4CHAN_THUMBS_URL = '0.thumbs.4chan.org'
 _THREAD = '%s/res/%i.json'
+_VERSION = '0.1.0'
 
 class Board(object):
     def __init__(self, boardName, https = False, apiUrl = _4CHAN_API):
         self._https = https
         self._baseUrl = ('http://' if not https else 'https://') + apiUrl
         self._boardName = boardName
-        self._requestsSession = requests.session()
+        self._requestsSession = requests.session(headers = {'User-Agent': 'py-4chan/%s' % _VERSION})
         self._threadCache = {}
 
     def getThread(self, id, updateIfCached = True):

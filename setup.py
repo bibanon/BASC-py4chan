@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
 from distutils.core import setup
+from py4chan import _VERSION
 
 setup(name='py-4chan',
-    version='0.0.1',
+    version=_VERSION,
     description='Python 4chan API Wrapper',
     author='Edgeworth Euler',
     author_email='e@encyclopediadramatica.se',
