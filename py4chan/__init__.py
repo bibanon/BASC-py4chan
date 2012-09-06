@@ -71,19 +71,25 @@ class Thread(object):
 
     @staticmethod
     def fromRequest(board, res, id):
-        t = Thread(board, id)
-        t._last_modified = res.headers['last-modified']
+        if res.status == 404:
+            return None
 
-        posts = json.loads(res.text)['posts']
-        t.topic = Post(t, posts[0])
-        t.replies.extend(Post(t, p) for p in posts[1:])
+        if res.status == 200:
+            t = Thread(board, id)
+            t._last_modified = res.headers['last-modified']
 
-        if not t.replies:
-            t.last_reply_id = t.topic.PostNumber
-        else:
-            t.last_reply_id = t.replies[-1].PostNumber
+            posts = json.loads(res.text)['posts']
+            t.topic = Post(t, posts[0])
+            t.replies.extend(Post(t, p) for p in posts[1:])
 
-        return t
+            if not t.replies:
+                t.last_reply_id = t.topic.PostNumber
+            else:
+                t.last_reply_id = t.replies[-1].PostNumber
+
+            return t
+
+        # TODO: Raise Exception
 
     def Files(self):
         """
@@ -98,19 +104,39 @@ class Thread(object):
         """
             Fetch new posts from the server. Returns an integer with the number of new posts.
         """
-        url = '%s/%s' % (self._board._baseUrl, _THREAD % (self._board._boardName, self.id))
-        res = self._board._requestsSession.get(url)
-        if res.headers['last-modified'] == self._last_modified:
+        if self.is_404:
             return 0
 
-        self._last_modified = res.headers['last-modified']
-        posts = json.loads(res.text)['posts']
+        url = '%s/%s' % (self._board._baseUrl, _THREAD % (self._board._boardName, self.id))
+        res = self._board._requestsSession.get(url, headers = {
+            'If-Modified-Since': self._last_modified
+        })
 
-        originalPostCount = len(self.replies)
-        self.replies.extend(Post(self, p) for p in posts if p['no'] > self.last_reply_id)
-        newPostCount = len(self.replies)
+        if res.status == 304:
+            return 0
 
-        return newPostCount - originalPostCount
+        elif res.status == 404:
+            self.is_404 = True
+            return 0
+
+        elif res.status == 200:
+            self._last_modified = res.headers['last-modified']
+            posts = json.loads(res.text)['posts']
+
+            originalPostCount = len(self.replies)
+            self.replies.extend(Post(self, p) for p in posts if p['no'] > self.last_reply_id)
+            newPostCount = len(self.replies)
+            postCountDelta = newPostCount - originalPostCount
+            if not postCountDelta:
+                return 0
+
+            self.last_reply_id = self.replies[-1]
+
+            return postCountDelta
+
+        else:
+            # TODO: Raise Exception...
+            return 0
 
     def __repr__(self):
         return '<Thread /%s/%i, %i replies>' % (
@@ -126,6 +152,10 @@ class Post(object):
     @property
     def PostNumber(self):
         return self._data['no']
+
+    @property
+    def Id(self):
+        return self._data.get('id')
 
     @property
     def Name(self):
