@@ -8,6 +8,6 @@ setup(name='py-4chan',
     description='Python 4chan API Wrapper',
     author='Edgeworth Euler',
     author_email='e@encyclopediadramatica.se',
-    url='github.com/e000/py-4chan',
+    url='http://github.com/e000/py-4chan',
     packages=['py4chan']
 )

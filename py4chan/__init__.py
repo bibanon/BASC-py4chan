@@ -13,7 +13,7 @@ _4CHAN_API = 'api.4chan.org'
 _4CHAN_IMAGES_URL = 'images.4chan.org'
 _4CHAN_THUMBS_URL = '0.thumbs.4chan.org'
 _THREAD = '%s/res/%i.json'
-_VERSION = '0.1.0'
+_VERSION = '0.1.1'
 
 class Board(object):
     def __init__(self, boardName, https = False, apiUrl = _4CHAN_API):
@@ -131,7 +131,7 @@ class Thread(object):
             if not postCountDelta:
                 return 0
 
-            self.last_reply_id = self.replies[-1]
+            self.last_reply_id = self.replies[-1].PostNumber
 
             return postCountDelta
 
@@ -260,11 +260,9 @@ class Post(object):
     def HasFile(self):
         return 'filename' in self._data
 
-    @property
     def FileRequest(self):
         return self._thread._board._requestsSession.get(self.FileUrl)
 
-    @property
     def ThumbnailRequest(self):
         return self._thread._board._requestsSession.get(self.ThumbnailUrl)
 
