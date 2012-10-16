@@ -17,8 +17,10 @@ from datetime import datetime
 import base64
 
 _4CHAN_API = 'api.4chan.org'
+_4CHAN_BOARDS_URL = 'boards.4chan.org'
 _4CHAN_IMAGES_URL = 'images.4chan.org'
 _4CHAN_THUMBS_URL = '0.thumbs.4chan.org'
+_BOARD = '%s/%i.json'
 _THREAD = '%s/res/%i.json'
 _VERSION = '0.1.1'
 
@@ -31,6 +33,13 @@ class Board(object):
         self._threadCache = {}
 
     def getThread(self, id, updateIfCached = True):
+        """
+            Get a thread from 4chan via 4chan API.
+
+            :param id: thread ID
+            :param updateIfCached: Should the thread be updated if it's found in the cache?
+            :return: Thread
+        """
         if id in self._threadCache:
             thread = self._threadCache[id]
             if updateIfCached:
@@ -44,17 +53,56 @@ class Board(object):
         url = '%s/%s' % (self._baseUrl, _THREAD % (self._boardName, id))
         res = self._requestsSession.get(url)
 
-        thread = Thread.fromRequest(self, res, id)
+        thread = Thread._fromRequest(self, res, id)
         self._threadCache[id] = thread
 
         return thread
 
     def threadExists(self, id):
+        """
+            Check if a thread exists, or is 404.
+            :param id: thread ID
+            :return: bool
+        """
         url = '%s/%s' % (self._baseUrl, _THREAD % (self._boardName, id))
         return self._requestsSession.head(url).status_code == 200
 
+    def getThreads(self, page = 1):
+        """
+            Get thread on pages, if the thread is already in cache, return cached thread entry.
+
+            Sets thread.want_update to True if the thread is being returned from the cache.
+            :param: page: page to fetch thread from
+            :return: list[Thread]
+        """
+        page -= 1
+        url = '%s/%s' % (self._baseUrl, _BOARD % (self._boardName,page))
+        res = self._requestsSession.get(url)
+        if res.status_code != 200:
+            res.raise_for_status()
+
+        json = res.json
+        threads = []
+        for thread_json in json['threads']:
+            thread = Thread._fromJson(thread_json, self)
+            if thread.id in self._threadCache:
+                thread = self._threadCache[thread.id]
+                thread.want_update = True
+            else:
+                self._threadCache[thread.id] = thread
+
+            threads.append(thread)
+
+        return threads
+
+
+
     @property
     def Name(self):
+        """
+            Board name that this board represents.
+            :return: string
+        """
         return self._boardName
 
 
@@ -66,38 +114,65 @@ class Thread(object):
         self.replies = []
         self.is_404 = False
         self.last_reply_id = 0
+        self.omitted_posts = 0
+        self.omitted_images = 0
+        self.want_update = False
         self._last_modified = None
 
     @property
     def Closed(self):
+        """
+            Is the thread closed?
+            :return: bool
+        """
         return self.topic._data['closed'] == 1
 
     @property
     def Sticky(self):
+        """
+            Is the thread sticky?
+            :return: bool
+        """
         return self.topic._data['sticky'] == 1
 
     @staticmethod
-    def fromRequest(board, res, id):
+    def _fromRequest(board, res, id):
         if res.status_code == 404:
             return None
 
         elif res.status_code == 200:
-            t = Thread(board, id)
-            t._last_modified = res.headers['last-modified']
+            return Thread._fromJson(res.json, board, id, res.headers['last-modified'])
 
-            posts = res.json['posts']
-            t.topic = Post(t, posts[0])
-            t.replies.extend(Post(t, p) for p in posts[1:])
+        else:
+            res.raise_for_status()
 
+    @staticmethod
+    def _fromJson(json, board, id = None, last_modified = None):
+        t = Thread(board, id)
+        t._last_modified = last_modified
+
+        posts = json['posts']
+        if id is None:
+            head = posts[0]
+            t.id = head['no']
+            try:
+                t.omitted_images = head['omitted_images']
+                t.omitted_posts = head['omitted_posts']
+
+            except KeyError:
+                pass
+
+        t.topic = Post(t, posts[0])
+        t.replies.extend(Post(t, p) for p in posts[1:])
+
+        if id is not None:
             if not t.replies:
                 t.last_reply_id = t.topic.PostNumber
             else:
                 t.last_reply_id = t.replies[-1].PostNumber
 
-            return t
+        return t
 
-        else:
-            res.raise_for_status()
 
     def Files(self):
         """
@@ -111,14 +186,19 @@ class Thread(object):
     def update(self):
         """
             Fetch new posts from the server. Returns an integer with the number of new posts.
+
+            :return: int: How many new posts fetched.
         """
         if self.is_404:
             return 0
 
         url = '%s/%s' % (self._board._baseUrl, _THREAD % (self._board._boardName, self.id))
-        res = self._board._requestsSession.get(url, headers = {
-            'If-Modified-Since': self._last_modified
-        })
+        if self._last_modified:
+            headers = {'If-Modified-Since': self._last_modified}
+        else:
+            headers = {}
+
+        res = self._board._requestsSession.get(url, headers = headers)
 
         if res.status_code == 304:
             return 0
@@ -128,11 +208,18 @@ class Thread(object):
             return 0
 
         elif res.status_code == 200:
+            self.want_update = False
+            self.omitted_images = 0
+            self.omitted_posts = 0
             self._last_modified = res.headers['last-modified']
             posts = res.json['posts']
 
             originalPostCount = len(self.replies)
-            self.replies.extend(Post(self, p) for p in posts if p['no'] > self.last_reply_id)
+            self.topic = Post(self, posts[0])
+            if self.last_reply_id:
+                self.replies.extend(Post(self, p) for p in posts if p['no'] > self.last_reply_id)
+            else:
+                self.replies[:] = [Post(self, p) for p in posts[1:]]
             newPostCount = len(self.replies)
             postCountDelta = newPostCount - originalPostCount
             if not postCountDelta:
@@ -146,8 +233,14 @@ class Thread(object):
             res.raise_for_status()
 
     def __repr__(self):
-        return '<Thread /%s/%i, %i replies>' % (
-            self._board.Name, self.id, len(self.replies)
+        extra = ""
+        if self.omitted_images or self.omitted_posts:
+            extra = ", %i omitted images, %i omitted posts" % (
+                self.omitted_images, self.omitted_posts
+            )
+
+        return '<Thread /%s/%i, %i replies%s>' % (
+            self._board.Name, self.id, len(self.replies), extra
         )
 
 
@@ -158,10 +251,16 @@ class Post(object):
 
     @property
     def PostNumber(self):
+        """
+            :return: int
+        """
         return self._data['no']
 
     @property
     def Id(self):
+        """
+            :return: int
+        """
         return self._data.get('id')
 
     @property
@@ -272,6 +371,17 @@ class Post(object):
 
     def ThumbnailRequest(self):
         return self._thread._board._requestsSession.get(self.ThumbnailUrl)
+
+    @property
+    def PostUrl(self):
+        board = self._thread._board
+        return "%s://%s/%s/res/%i#p%i" % (
+            'https' if board._https else 'http',
+            _4CHAN_BOARDS_URL,
+            board.Name,
+            self._thread.id,
+            self.PostNumber
+        )
 
     def __repr__(self):
         return "<Post /%s/%i#%i, hasFile: %r>" % (
