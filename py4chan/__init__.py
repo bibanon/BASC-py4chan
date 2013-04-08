@@ -177,12 +177,21 @@ class Thread(object):
 
     def Files(self):
         """
-            Returns a generator that yields all the URL of all the files in the thread.
+            Returns a generator that yields all the URL of all the files (not thumbnails) in the thread.
         """
         yield self.topic.FileUrl
         for reply in self.replies:
             if reply.HasFile:
                 yield reply.FileUrl
+
+    def Thumbs(self):
+        """
+            Returns a generator that yields all the URL of all the thumbnails in the thread.
+        """
+        yield self.topic.ThumbnailUrl
+        for reply in self.replies:
+            if reply.HasFile:
+                yield reply.ThumbnailUrl
 
     def update(self, force = False):
         """
