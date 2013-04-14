@@ -23,7 +23,7 @@ _4CHAN_IMAGES_URL = 'images.4chan.org'
 _4CHAN_THUMBS_URL = '0.thumbs.4chan.org'
 _BOARD = '%s/%i.json'
 _THREAD = '%s/res/%i.json'
-_VERSION = '0.1.2'
+_VERSION = '0.1.3'
 
 class Board(object):
     def __init__(self, boardName, https = False, apiUrl = _4CHAN_API, session = None):
