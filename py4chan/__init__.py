@@ -12,7 +12,8 @@
 
 """
 
-import requests
+# Using requests-transition to use older version of requests, 0.14, in the meantime
+import requests0 as requests
 from datetime import datetime
 import base64
 
