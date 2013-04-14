@@ -24,6 +24,6 @@ setup(name='py-4chan',
     author_email='e@encyclopediadramatica.se',
     url='http://github.com/e000/py-4chan',
     license="http://sam.zoy.org/wtfpl/COPYING",
-    packages=['py4chan']
-    install_requires = ['requests-transition'],
+    packages=['py4chan'],
+    install_requires = ['requests-transition']
 )
