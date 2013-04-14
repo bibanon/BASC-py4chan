@@ -17,6 +17,9 @@
 from distutils.core import setup
 from py4chan import _VERSION
 
+# Use requirements.txt file for dependencies
+REQUIREMENTS = [i.strip() for i in open("requirements.txt").readlines()]
+
 setup(name='py-4chan',
     version=_VERSION,
     description='Python 4chan API Wrapper',
@@ -25,5 +28,5 @@ setup(name='py-4chan',
     url='http://github.com/e000/py-4chan',
     license="http://sam.zoy.org/wtfpl/COPYING",
     packages=['py4chan'],
-    install_requires = ['requests-transition']
+    install_requires = REQUIREMENTS
 )
