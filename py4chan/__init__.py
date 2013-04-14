@@ -290,23 +290,23 @@ class Post(object):
 
     @property
     def Name(self):
-        return self._data['name'] or None
+        return self._data.get('name', None)
 
     @property
     def EMail(self):
-        return self._data['email'] or None
+        return self._data.get('email', None)
 
     @property
     def Tripcode(self):
-        return self._data['tripcode'] or None
+        return self._data.get('tripcode', None)
 
     @property
     def Subject(self):
-        return self._data['sub'] or None
+        return self._data.get('sub', None)
     
     @property
     def Comment(self):
-        return self._data['com'] or None
+        return self._data.get('com', None)
 
     @property
     def Timestamp(self):
