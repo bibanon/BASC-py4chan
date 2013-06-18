@@ -15,10 +15,13 @@
 """
 
 from distutils.core import setup
-from py4chan import _VERSION
+#from py4chan import _VERSION		# Causes issues with requests-transition, when requests is not already installed. Use workaround
+_VERSION = '0.1.3'
 
 # Use requirements.txt file for dependencies
-REQUIREMENTS = [i.strip() for i in open("requirements.txt").readlines()]
+# Disabled, because it doesn't work with PyPi
+#REQUIREMENTS = [i.strip() for i in open("requirements.txt").readlines()]
+REQUIREMENTS = 'requests-transition'
 
 setup(name='py-4chan',
     version=_VERSION,
