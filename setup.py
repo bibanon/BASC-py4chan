@@ -28,5 +28,5 @@ setup(name='py-4chan',
     url='http://github.com/e000/py-4chan',
     license="http://sam.zoy.org/wtfpl/COPYING",
     packages=['py4chan'],
-    install_requires = REQUIREMENTS
+    install_requires = REQUIREMENTS,
 )

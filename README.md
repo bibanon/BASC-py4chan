@@ -21,6 +21,13 @@ print "I fetched," thread.update(), "new replies."
 
 API Documentation coming soon, but you can figure most of it out from the source. It's not rocket science.
 
+[You can install this package straight from PyPi](https://pypi.python.org/pypi/py-4chan).
+
+```
+# upload command
+python setup.py sdist upload
+```
+
 # License
 
 ``` text
