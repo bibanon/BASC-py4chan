@@ -12,11 +12,8 @@
 
 """
 
-# Using requests-transition to use older version of requests, 0.14, until we update
-#import requests
-import requests0 as requests
+import requests
 from datetime import datetime
-import base64
 
 _4CHAN_BOARDS_URL = 'boards.4chan.org'
 _4CHAN_API = 'a.4cdn.org'
@@ -30,14 +27,20 @@ _4CHAN_THUMBS_URL = 't.4cdn.org'
 
 _BOARD = '%s/%i.json'
 _THREAD = '%s/res/%i.json'
-_VERSION = '0.1.3'
+_VERSION = '0.2.1'
 
 class Board(object):
     def __init__(self, boardName, https = False, apiUrl = _4CHAN_API, session = None):
         self._https = https
         self._base_url = ('http://' if not https else 'https://') + apiUrl
         self._board_name = boardName
-        self._requests_session = session or requests.session(headers = {'User-Agent': 'py-4chan/%s' % _VERSION})
+        
+        # requests 1.x updated calls
+        self._requests_session = session or requests.session()
+        self._requests_session.headers = {'User-Agent': 'py-4chan/%s' % _VERSION}
+        # requests 0.14 vintage code
+#        self._requests_session = session or requests.session(headers = {'User-Agent': 'py-4chan/%s' % _VERSION})
+        
         self._thread_cache = {}
 
     def getThread(self, id, updateIfCached = True):
@@ -111,6 +114,9 @@ class Board(object):
         """
         return self._board_name
 
+    def __repr__(self):
+        return '<Board /%s/>' % self.name
+
 class Thread(object):
     def __init__(self, board, id):
         self._board = board
@@ -146,7 +152,7 @@ class Thread(object):
             return None
 
         elif res.status_code == 200:
-            return Thread._fromJson(res.json, board, id, res.headers['last-modified'])
+            return Thread._fromJson(res.json(), board, id, res.headers['last-modified'])
 
         else:
             res.raise_for_status()
@@ -263,6 +269,20 @@ class Thread(object):
         else:
             res.raise_for_status()
 
+    @property
+    def AllPosts(self):
+        return [self.topic] + self.replies
+
+    @property
+    def ThreadUrl(self):
+        board = self._board
+        return "%s://%s/%s/res/%i" % (
+            'https' if board._https else 'http',
+            _4CHAN_BOARDS_URL,
+            board.Name,
+            self.id
+        )
+
     def __repr__(self):
         extra = ""
         if self.omitted_images or self.omitted_posts:
@@ -327,7 +347,7 @@ class Post(object):
         if not self.HasFile:
             return None
 
-        return base64.b64decode(self._data['md5'])
+        return self._data['md5'].decode('base64')
 
     @property
     def FileMd5Hex(self):

@@ -16,7 +16,7 @@ for file in thread.Files():
     print file
     
 # In a while...
-print "I fetched," thread.update(), "new replies."
+print "I fetched", thread.update(), "new replies."
 ```
 
 API Documentation coming soon, but you can figure most of it out from the source. It's not rocket science.
