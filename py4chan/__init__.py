@@ -12,7 +12,8 @@
 
 """
 
-# Using requests-transition to use older version of requests, 0.14, in the meantime
+# Using requests-transition to use older version of requests, 0.14, until we update
+#import requests
 import requests0 as requests
 from datetime import datetime
 import base64
@@ -80,12 +81,12 @@ class Board(object):
             :return: list[Thread]
         """
         page -= 1
-        url = '%s/%s' % (self._base_url, _BOARD % (self._board_name,page))
+        url = '%s/%s' % (self._base_url, _BOARD % (self._board_name, page))
         res = self._requests_session.get(url)
         if res.status_code != 200:
             res.raise_for_status()
 
-        json = res.json
+        json = res.json()
         threads = []
         for thread_json in json['threads']:
             id = thread_json['posts'][0]['no']
@@ -109,7 +110,6 @@ class Board(object):
             :return: string
         """
         return self._board_name
-
 
 class Thread(object):
     def __init__(self, board, id):
@@ -184,7 +184,7 @@ class Thread(object):
 
     def Files(self):
         """
-            Returns a generator that yields all the URL of all the files (not thumbnails) in the thread.
+            Returns a generator that yields all the URLs of all the files (not thumbnails) in the thread.
         """
         yield self.topic.FileUrl
         for reply in self.replies:
@@ -193,7 +193,7 @@ class Thread(object):
 
     def Thumbs(self):
         """
-            Returns a generator that yields all the URL of all the thumbnails in the thread.
+            Returns a generator that yields all the URLs of all the thumbnails in the thread.
         """
         yield self.topic.ThumbnailUrl
         for reply in self.replies:
@@ -243,7 +243,7 @@ class Thread(object):
             self.omitted_posts = 0
 
             self._last_modified = res.headers['last-modified']
-            posts = res.json['posts']
+            posts = res.json()['posts']
 
             originalPostCount = len(self.replies)
             self.topic = Post(self, posts[0])
@@ -292,27 +292,27 @@ class Post(object):
         """
             :return: int
         """
-        return self._data.get('id')
+        return self._data.get('id')     # dict.get() returns None if not found
 
     @property
     def Name(self):
-        return self._data.get('name', None)
+        return self._data.get('name')
 
     @property
     def EMail(self):
-        return self._data.get('email', None)
+        return self._data.get('email')
 
     @property
     def Tripcode(self):
-        return self._data.get('tripcode', None)
+        return self._data.get('tripcode')
 
     @property
     def Subject(self):
-        return self._data.get('sub', None)
+        return self._data.get('sub')
     
     @property
     def Comment(self):
-        return self._data.get('com', None)
+        return self._data.get('com')
 
     @property
     def Timestamp(self):
@@ -353,19 +353,19 @@ class Post(object):
     
     @property
     def FileExtension(self):
-        return self._data.get('ext', None)
+        return self._data.get('ext')
 
     @property
     def FileSize(self):
-        return self._data.get('fsize', None)
+        return self._data.get('fsize')
     
     @property
     def FileWidth(self):
-        return self._data.get('w', None)
+        return self._data.get('w')
     
     @property
     def FileHeight(self):
-        return self._data.get('h', None)
+        return self._data.get('h')
 
     @property
     def FileDeleted(self):
@@ -373,11 +373,11 @@ class Post(object):
 
     @property
     def ThumbnailWidth(self):
-        return self._data.get('tn_w', None)
+        return self._data.get('tn_w')
 
     @property
     def ThumbnailHeight(self):
-        return self._data.get('tn_h', None)
+        return self._data.get('tn_h')
 
     @property
     def ThumbnailUrl(self):
