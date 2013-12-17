@@ -27,13 +27,13 @@ _4CHAN_THUMBS_URL = 't.4cdn.org'
 
 _BOARD = '%s/%i.json'
 _THREAD = '%s/res/%i.json'
-_VERSION = '0.2.1'
+_VERSION = '0.3'
 
 class Board(object):
-    def __init__(self, boardName, https = False, apiUrl = _4CHAN_API, session = None):
+    def __init__(self, board_name, https = False, api_url = _4CHAN_API, session = None):
         self._https = https
-        self._base_url = ('http://' if not https else 'https://') + apiUrl
-        self._board_name = boardName
+        self._base_url = ('http://' if not https else 'https://') + api_url
+        self._board_name = board_name
         
         # requests 1.x updated calls
         self._requests_session = session or requests.session()
@@ -43,7 +43,7 @@ class Board(object):
         
         self._thread_cache = {}
 
-    def getThread(self, id, updateIfCached = True):
+    def get_thread(self, id, update_if_cached = True):
         """
             Get a thread from 4chan via 4chan API.
 
@@ -53,7 +53,7 @@ class Board(object):
         """
         if id in self._thread_cache:
             thread = self._thread_cache[id]
-            if updateIfCached:
+            if update_if_cached:
                 thread.update()
 
             return thread
@@ -61,12 +61,12 @@ class Board(object):
         url = '%s/%s' % (self._base_url, _THREAD % (self._board_name, id))
         res = self._requests_session.get(url)
 
-        thread = Thread._fromRequest(self, res, id)
+        thread = Thread._from_request(self, res, id)
         self._thread_cache[id] = thread
 
         return thread
 
-    def threadExists(self, id):
+    def thread_exists(self, id):
         """
             Check if a thread exists, or is 404.
             :param id: thread ID
@@ -75,7 +75,7 @@ class Board(object):
         url = '%s/%s' % (self._base_url, _THREAD % (self._board_name, id))
         return self._requests_session.head(url).status_code == 200
 
-    def getThreads(self, page = 1):
+    def get_threads(self, page = 1):
         """
             Get thread on pages, if the thread is already in cache, return cached thread entry.
 
@@ -97,7 +97,7 @@ class Board(object):
                 thread = self._thread_cache[id]
                 thread.want_update = True
             else:
-                thread = Thread._fromJson(thread_json, self)
+                thread = Thread._from_json(thread_json, self)
                 self._thread_cache[thread.id] = thread
 
             threads.append(thread)
@@ -107,7 +107,7 @@ class Board(object):
 
 
     @property
-    def Name(self):
+    def name(self):
         """
             Board name that this board represents.
             :return: string
@@ -131,12 +131,12 @@ class Thread(object):
         self._last_modified = None
 
     @property
-    def Closed(self):
+    def closed(self):
         """
             Is the thread closed?
             :return: bool
         """
-        return self.topic._data['closed'] == 1
+        return self.topic._data.get('closed', 0) == 1
 
     @property
     def Sticky(self):
@@ -144,21 +144,21 @@ class Thread(object):
             Is the thread sticky?
             :return: bool
         """
-        return self.topic._data['sticky'] == 1
+        return self.topic._data.get('sticky', 0) == 1
 
     @staticmethod
-    def _fromRequest(board, res, id):
+    def _from_request(board, res, id):
         if res.status_code == 404:
             return None
 
         elif res.status_code == 200:
-            return Thread._fromJson(res.json(), board, id, res.headers['last-modified'])
+            return Thread._from_json(res.json(), board, id, res.headers['last-modified'])
 
         else:
             res.raise_for_status()
 
     @staticmethod
-    def _fromJson(json, board, id = None, last_modified = None):
+    def _from_json(json, board, id = None, last_modified = None):
         t = Thread(board, id)
         t._last_modified = last_modified
 
@@ -170,9 +170,9 @@ class Thread(object):
 
         if id is not None:
             if not t.replies:
-                t.last_reply_id = t.topic.PostNumber
+                t.last_reply_id = t.topic.post_number
             else:
-                t.last_reply_id = t.replies[-1].PostNumber
+                t.last_reply_id = t.replies[-1].post_number
 
         else:
             t.want_update = True
@@ -188,23 +188,23 @@ class Thread(object):
         return t
 
 
-    def Files(self):
+    def files(self):
         """
             Returns a generator that yields all the URLs of all the files (not thumbnails) in the thread.
         """
-        yield self.topic.FileUrl
+        yield self.topic.file_url
         for reply in self.replies:
-            if reply.HasFile:
-                yield reply.FileUrl
+            if reply.has_file:
+                yield reply.file_url
 
-    def Thumbs(self):
+    def thumbs(self):
         """
             Returns a generator that yields all the URLs of all the thumbnails in the thread.
         """
-        yield self.topic.ThumbnailUrl
+        yield self.topic.thumbnail_url
         for reply in self.replies:
-            if reply.HasFile:
-                yield reply.ThumbnailUrl
+            if reply.has_file:
+                yield reply.thumbnail_url
 
     def update(self, force = False):
         """
@@ -251,20 +251,20 @@ class Thread(object):
             self._last_modified = res.headers['last-modified']
             posts = res.json()['posts']
 
-            originalPostCount = len(self.replies)
+            original_post_count = len(self.replies)
             self.topic = Post(self, posts[0])
             if self.last_reply_id and not force:
                 self.replies.extend(Post(self, p) for p in posts if p['no'] > self.last_reply_id)
             else:
                 self.replies[:] = [Post(self, p) for p in posts[1:]]
-            newPostCount = len(self.replies)
-            postCountDelta = newPostCount - originalPostCount
-            if not postCountDelta:
+            new_post_count = len(self.replies)
+            post_count_delta = new_post_count - original_post_count
+            if not post_count_delta:
                 return 0
 
-            self.last_reply_id = self.replies[-1].PostNumber
+            self.last_reply_id = self.replies[-1].post_number
 
-            return postCountDelta
+            return post_count_delta
 
         else:
             res.raise_for_status()
@@ -279,7 +279,7 @@ class Thread(object):
         return "%s://%s/%s/res/%i" % (
             'https' if board._https else 'http',
             _4CHAN_BOARDS_URL,
-            board.Name,
+            board.name,
             self.id
         )
 
@@ -291,7 +291,7 @@ class Thread(object):
             )
 
         return '<Thread /%s/%i, %i replies%s>' % (
-            self._board.Name, self.id, len(self.replies), extra
+            self._board.name, self.id, len(self.replies), extra
         )
 
 
@@ -301,64 +301,64 @@ class Post(object):
         self._data = data
 
     @property
-    def PostNumber(self):
+    def post_number(self):
         """
             :return: int
         """
         return self._data['no']
 
     @property
-    def Id(self):
+    def id(self):
         """
             :return: int
         """
         return self._data.get('id')     # dict.get() returns None if not found
 
     @property
-    def Name(self):
+    def name(self):
         return self._data.get('name')
 
     @property
-    def EMail(self):
+    def email(self):
         return self._data.get('email')
 
     @property
-    def Tripcode(self):
+    def tripcode(self):
         return self._data.get('tripcode')
 
     @property
-    def Subject(self):
+    def subject(self):
         return self._data.get('sub')
     
     @property
-    def Comment(self):
+    def comment(self):
         return self._data.get('com')
 
     @property
-    def Timestamp(self):
+    def timestamp(self):
         return self._data['time']
 
     @property
-    def Datetime(self):
+    def datetime(self):
         return datetime.fromtimestamp(self._data['time'])
 
     @property
-    def FileMd5(self):
+    def file_md5(self):
         if not self.HasFile:
             return None
 
         return self._data['md5'].decode('base64')
 
     @property
-    def FileMd5Hex(self):
-        if not self.HasFile:
+    def file_md5_hex(self):
+        if not self.has_file:
             return None
 
-        return self.FileMd5.encode('hex')
+        return self.file_md5.encode('hex')
 
     @property
-    def FileUrl(self):
-        if not self.HasFile:
+    def file_url(self):
+        if not self.has_file:
             return None
 
         board = self._thread._board
@@ -366,41 +366,41 @@ class Post(object):
         return '%s://%s/%s/src/%i%s' % (
             'https' if board._https else 'http',
             _4CHAN_IMAGES_URL,
-            board.Name,
+            board.name,
             self._data['tim'],
             self._data['ext']
         )
     
     @property
-    def FileExtension(self):
+    def file_extension(self):
         return self._data.get('ext')
 
     @property
-    def FileSize(self):
+    def file_size(self):
         return self._data.get('fsize')
     
     @property
-    def FileWidth(self):
+    def file_width(self):
         return self._data.get('w')
     
     @property
-    def FileHeight(self):
+    def file_height(self):
         return self._data.get('h')
 
     @property
-    def FileDeleted(self):
+    def file_deleted(self):
         return self._data.get('filedeleted', 0) == 1
 
     @property
-    def ThumbnailWidth(self):
+    def thumbnail_width(self):
         return self._data.get('tn_w')
 
     @property
-    def ThumbnailHeight(self):
+    def thumbnail_height(self):
         return self._data.get('tn_h')
 
     @property
-    def ThumbnailUrl(self):
+    def thumbnail_url(self):
         if not self.HasFile:
             return None
 
@@ -409,35 +409,35 @@ class Post(object):
         return '%s://%s/%s/thumb/%is.jpg' % (
             'https' if board._https else 'http',
             _4CHAN_THUMBS_URL,
-            board.Name,
+            board.name,
             self._data['tim']
         )
 
     @property
-    def HasFile(self):
+    def has_file(self):
         return 'filename' in self._data
 
-    def FileRequest(self):
-        return self._thread._board._requests_session.get(self.FileUrl)
+    def file_request(self):
+        return self._thread._board._requests_session.get(self.file_url)
 
-    def ThumbnailRequest(self):
-        return self._thread._board._requests_session.get(self.ThumbnailUrl)
+    def thumbnail_request(self):
+        return self._thread._board._requests_session.get(self.thumbnail_url)
 
     @property
-    def PostUrl(self):
+    def post_url(self):
         board = self._thread._board
         return "%s://%s/%s/res/%i#p%i" % (
             'https' if board._https else 'http',
             _4CHAN_BOARDS_URL,
-            board.Name,
+            board.name,
             self._thread.id,
-            self.PostNumber
+            self.post_number
         )
 
     def __repr__(self):
-        return "<Post /%s/%i#%i, hasFile: %r>" % (
-            self._thread._board.Name,
+        return "<Post /%s/%i#%i, has_file: %r>" % (
+            self._thread._board.name,
             self._thread.id,
-            self.PostNumber,
-            self.HasFile
+            self.post_number,
+            self.has_file
         )
