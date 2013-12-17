@@ -8,11 +8,11 @@ Python Wrapper for 4chan API. Uses requests, respects if-modified-since headers 
 ``` python
 import py4chan
 b = py4chan.Board('b')
-thread = b.getThread(423491034)
+thread = b.get_thread(423491034)
 
 print thread
 
-for file in thread.Files():
+for file in thread.files():
     print file
     
 # In a while...

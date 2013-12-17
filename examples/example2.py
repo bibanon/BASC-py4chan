@@ -11,8 +11,8 @@ def main():
         return
 
     board = py4chan.Board(sys.argv[1])
-    thread = board.getThread(int(sys.argv[2]))
-    for file in thread.Files():
+    thread = board.get_thread(int(sys.argv[2]))
+    for file in thread.files():
         print file
 
 if __name__ == '__main__':
