@@ -36,6 +36,7 @@ The Bibliotheca Anonoma has created it's own fork of py-4chan
 * **Anorov's underscore_function_notation** - Even I have to say that CamelCase is beginning to suck. However, you will have to rename all your function calls for existing apps, but that's just a find/replace away.
 * **Renamed files() to images(), and any `files` property to `images`** - 4chan only hosts image files, so the name of this function gets confusing, since it can refer to either images thumbnails. The `has_file` and `file_deleted` property retains it's name, though, since it refers to both thumbs and images. 
 * **images() and thumbs()** - now return images instead of URLs. The original functions have been renamed to image_urls() and thumb_urls()
+* **Post Class: image_fname and thumbnail_fname property**
 * **Actual API Documentation** - Real documentation on using the py-4chan library is a must. For some people, it is rocket science.
 
 # License
