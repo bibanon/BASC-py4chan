@@ -14,8 +14,8 @@ def main():
     print 'Post_number',  topic.post_number
     print 'Timestamp',    topic.timestamp
     print 'Date_time',    repr(topic.datetime)
-    print 'File_md5_hex', topic.file_md5_hex
-    print 'File_url',     topic.file_url
+    print 'Image_md5_hex', topic.image_md5_hex
+    print 'Image_url',     topic.image_url
     print 'Subject',      topic.subject
     print 'Comment',      topic.comment
     print 'Thumbnail_url',topic.thumbnail_url

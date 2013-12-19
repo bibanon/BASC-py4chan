@@ -191,11 +191,11 @@ class Thread(object):
     def image_urls(self):
         """
             Returns a generator that yields all the URLs of all the files (not thumbnails) in the thread.
-        """
-        yield self.topic.file_url
+        """file
+        yield self.topic.image_url
         for reply in self.replies:
             if reply.has_file:
-                yield reply.file_url
+                yield reply.image_url
 
     def thumb_urls(self):
         """
@@ -343,21 +343,21 @@ class Post(object):
         return datetime.fromtimestamp(self._data['time'])
 
     @property
-    def file_md5(self):
-        if not self.HasFile:
+    def image_md5(self):
+        if not self.has_file:
             return None
 
         return self._data['md5'].decode('base64')
 
     @property
-    def file_md5_hex(self):
+    def image_md5_hex(self):
         if not self.has_file:
             return None
 
-        return self.file_md5.encode('hex')
+        return self.image_md5.encode('hex')
 
     @property
-    def file_url(self):
+    def image_url(self):
         if not self.has_file:
             return None
 
@@ -372,19 +372,19 @@ class Post(object):
         )
     
     @property
-    def file_extension(self):
+    def image_extension(self):
         return self._data.get('ext')
 
     @property
-    def file_size(self):
+    def image_size(self):
         return self._data.get('fsize')
     
     @property
-    def file_width(self):
+    def image_width(self):
         return self._data.get('w')
     
     @property
-    def file_height(self):
+    def image_height(self):
         return self._data.get('h')
 
     @property
@@ -417,8 +417,8 @@ class Post(object):
     def has_file(self):
         return 'filename' in self._data
 
-    def file_request(self):
-        return self._thread._board._requests_session.get(self.file_url)
+    def image_request(self):
+        return self._thread._board._requests_session.get(self.image_url)
 
     def thumbnail_request(self):
         return self._thread._board._requests_session.get(self.thumbnail_url)
