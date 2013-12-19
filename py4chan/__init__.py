@@ -18,7 +18,7 @@ from datetime import datetime
 _4CHAN_BOARDS_URL = 'boards.4chan.org'
 _4CHAN_API = 'a.4cdn.org'
 _4CHAN_IMAGES_URL = 'i.4cdn.org'
-_4CHAN_THUMBS_URL = 't.4cdn.org'
+_4CHAN_THUMBS_URL = '0.t.4cdn.org'
 
 #_4CHAN_BOARDS_URL = 'boards.4chan.org'
 #_4CHAN_API = 'api.4chan.org'
@@ -139,7 +139,7 @@ class Thread(object):
         return self.topic._data.get('closed', 0) == 1
 
     @property
-    def Sticky(self):
+    def sticky(self):
         """
             Is the thread sticky?
             :return: bool
@@ -270,11 +270,11 @@ class Thread(object):
             res.raise_for_status()
 
     @property
-    def AllPosts(self):
+    def all_posts(self):
         return [self.topic] + self.replies
 
     @property
-    def ThreadUrl(self):
+    def thread_url(self):
         board = self._board
         return "%s://%s/%s/res/%i" % (
             'https' if board._https else 'http',
