@@ -187,11 +187,29 @@ class Thread(object):
 
         return t
 
+    def images(self):
+        """
+            Returns a generator that yields the filenames of all the images (not thumbnails) in the thread.
+        """
+        yield self.topic.image_fname
+        for reply in self.replies:
+            if reply.has_file:
+                yield reply.image_fname
+
+    def thumbs(self):
+        """
+            Returns a generator that yields the filenames of all the thumbnails in the thread.
+        """
+        yield self.topic.thumbnail_fname
+        for reply in self.replies:
+            if reply.has_file:
+                yield reply.thumbnail_fname
+
 
     def image_urls(self):
         """
-            Returns a generator that yields all the URLs of all the files (not thumbnails) in the thread.
-        """file
+            Returns a generator that yields all the URLs of all the images (not thumbnails) in the thread.
+        """
         yield self.topic.image_url
         for reply in self.replies:
             if reply.has_file:
@@ -357,6 +375,18 @@ class Post(object):
         return self.image_md5.encode('hex')
 
     @property
+    def image_fname(self):
+        if not self.has_file:
+            return None
+
+        board = self._thread._board
+        
+        return '%i%s' % (
+            self._data['tim'],
+            self._data['ext']
+        )
+
+    @property
     def image_url(self):
         if not self.has_file:
             return None
@@ -398,6 +428,16 @@ class Post(object):
     @property
     def thumbnail_height(self):
         return self._data.get('tn_h')
+
+    @property
+    def thumbnail_fname(self):
+        if not self.has_file:
+            return None
+
+        board = self._thread._board
+        
+        return '%is.jpg' % (self._data['tim'])
+
 
     @property
     def thumbnail_url(self):
