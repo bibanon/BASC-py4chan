@@ -28,6 +28,16 @@ API Documentation coming soon, but you can figure most of it out from the source
 python setup.py sdist upload
 ```
 
+## BA py-4chan 0.3 Update
+
+The Bibliotheca Anonoma has created it's own fork of py-4chan
+
+* **4chan cdn Link update** - To save money on bandwidth. 4chan has changed it's image/thumbnail/json/css servers to a domain name with fewer characters. However, that requires us to update py-4chan links, and that has not been done yet.
+* **Anorov's underscore_function_notation** - Even I have to say that CamelCase is beginning to suck. However, you will have to rename all your function calls for existing apps, but that's just a find/replace away.
+* **Renamed files() to images()** - 4chan only hosts image files, so the name of this function gets confusing, especially if you want to grab thumbnails.
+* **images() and thumbs()** - now return images instead of URLs. The original functions have been renamed to image_urls() and thumb_urls()
+* **Actual API Documentation** - Real documentation on using the py-4chan library is a must. For some people, it is rocket science.
+
 # License
 
 ``` text

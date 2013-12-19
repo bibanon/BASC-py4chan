@@ -188,7 +188,7 @@ class Thread(object):
         return t
 
 
-    def files(self):
+    def image_urls(self):
         """
             Returns a generator that yields all the URLs of all the files (not thumbnails) in the thread.
         """
@@ -197,7 +197,7 @@ class Thread(object):
             if reply.has_file:
                 yield reply.file_url
 
-    def thumbs(self):
+    def thumb_urls(self):
         """
             Returns a generator that yields all the URLs of all the thumbnails in the thread.
         """

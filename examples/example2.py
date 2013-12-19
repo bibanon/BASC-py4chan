@@ -12,7 +12,7 @@ def main():
 
     board = py4chan.Board(sys.argv[1])
     thread = board.get_thread(int(sys.argv[2]))
-    for file in thread.files():
+    for file in thread.image_urls():
         print file
 
 if __name__ == '__main__':
