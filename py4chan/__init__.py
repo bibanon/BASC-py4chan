@@ -153,7 +153,10 @@ class Thread(object):
             Is the thread sticky?
             :return: bool
         """
-        return self.topic._data.get('sticky', 0) == 1
+        try:
+            return self.topic.data['sticky'] == 1
+        except KeyError:
+            return False
 
     @staticmethod
     def _from_request(board, res, id):
