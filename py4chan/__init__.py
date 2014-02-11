@@ -31,6 +31,12 @@ _VERSION = '0.3'
 
 class Board(object):
     def __init__(self, board_name, https = False, api_url = _4CHAN_API, session = None):
+    	"""
+    		Initializes the board and any necessary components.
+
+    		>>> curr_board = py4chan.Board("v")
+    		>>> curr_board_https = py4chan.Board("v", https=True)
+    	"""
         self._https = https
         self._base_url = ('http://' if not https else 'https://') + api_url
         self._board_name = board_name
@@ -136,7 +142,10 @@ class Thread(object):
             Is the thread closed?
             :return: bool
         """
-        return self.topic._data.get('closed', 0) == 1
+        try:
+        	return self.topic.data['closed'] == 1
+        except KeyError:
+        	return False
 
     @property
     def sticky(self):
@@ -346,7 +355,10 @@ class Post(object):
 
     @property
     def subject(self):
-        return self._data.get('sub')
+        try:
+            return self._data['sub']
+        except KeyError:
+            return None
     
     @property
     def comment(self):
