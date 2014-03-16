@@ -1,8 +1,9 @@
 """
-    py-4chan
+    BA_py-4chan
     ~~~~~~~~
 
-    Python Wrappers to access 4chan's API.
+    Python Wrappers to access 4chan's API. Vastly improved fork created by
+    the Bibliotheca Anonoma.
 
     This program is free software. It comes without any warranty, to
     the extent permitted by applicable law. You can redistribute it
