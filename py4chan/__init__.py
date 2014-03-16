@@ -27,7 +27,7 @@ _4CHAN_THUMBS_URL = '0.t.4cdn.org'
 
 _BOARD = '%s/%i.json'
 _THREAD = '%s/res/%i.json'
-_VERSION = '0.3'
+_VERSION = '0.3.1'
 
 class Board(object):
     def __init__(self, board_name, https = False, api_url = _4CHAN_API, session = None):
@@ -143,7 +143,7 @@ class Thread(object):
             :return: bool
         """
         try:
-            return self.topic.data['closed'] == 1
+            return self.topic._data['closed'] == 1
         except KeyError:
             return False
 
@@ -154,7 +154,7 @@ class Thread(object):
             :return: bool
         """
         try:
-            return self.topic.data['sticky'] == 1
+            return self.topic._data['sticky'] == 1
         except KeyError:
             return False
 
@@ -383,14 +383,14 @@ class Post(object):
         if not self.has_file:
             return None
 
-        return self._data['md5'].decode('base64')
+        return base64.b64decode(self._data['md5'])
 
     @property
     def image_md5_hex(self):
         if not self.has_file:
             return None
 
-        return self.image_md5.encode('hex')
+        return binascii.hexlify(self.image_md5).decode('utf-8')
 
     @property
     def image_fname(self):

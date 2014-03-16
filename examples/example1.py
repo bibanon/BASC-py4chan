@@ -21,7 +21,7 @@ def main():
     print 'Thumbnail_url',topic.thumbnail_url
     print 'Replies',      thread.replies
     print 'All_posts',    thread.all_posts
-    print 'Thread_url'    thread.thread_url
+    print 'Thread_url',    thread.thread_url
 
 if __name__ == '__main__':
     main()
