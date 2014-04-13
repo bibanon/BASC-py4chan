@@ -1,5 +1,5 @@
-py-4chan
-========
+BASC py4chan
+============
 
 Python Wrapper for 4chan API. Uses requests, respects if-modified-since headers on updating threads. Caches thread objects. Fun stuff.
 
@@ -23,14 +23,9 @@ API Documentation coming soon, but you can figure most of it out from the source
 
 [You can install this package straight from PyPi](https://pypi.python.org/pypi/py-4chan).
 
-```
-# upload command
-python setup.py sdist upload
-```
+## BASC py4chan 0.3 Update
 
-## BA py-4chan 0.3 Update
-
-The Bibliotheca Anonoma has created it's own fork of py-4chan
+The Bibliotheca Anonoma StoryCorps has created it's own fork of py-4chan
 
 * **4chan cdn Link update** - To save money on bandwidth. 4chan has changed it's image/thumbnail/json/css servers to a domain name with fewer characters. However, that requires us to update py-4chan links, and that has not been done yet.
 * **Anorov's underscore_function_notation** - Even I have to say that CamelCase is beginning to suck. However, you will have to rename all your function calls for existing apps, but that's just a find/replace away.

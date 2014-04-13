@@ -1,5 +1,5 @@
 """
-    BA_py-4chan
+    BASC_py4chan
     ~~~~~~~~
 
     Python Wrappers to access 4chan's API. Vastly improved fork created by
