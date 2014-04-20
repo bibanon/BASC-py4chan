@@ -27,8 +27,8 @@ _4CHAN_THUMBS_URL = '0.t.4cdn.org'
 #_4CHAN_THUMBS_URL = '0.thumbs.4chan.org'
 
 _BOARD = '%s/%i.json'
-_THREAD = '%s/res/%i.json'
-_VERSION = '0.3.1'
+_THREAD = '%s/thread/%i.json'
+_VERSION = '0.3.2'
 
 class Board(object):
     def __init__(self, board_name, https = False, api_url = _4CHAN_API, session = None):
@@ -307,7 +307,7 @@ class Thread(object):
     @property
     def thread_url(self):
         board = self._board
-        return "%s://%s/%s/res/%i" % (
+        return "%s://%s/%s/thread/%i" % (
             'https' if board._https else 'http',
             _4CHAN_BOARDS_URL,
             board.name,
@@ -412,7 +412,7 @@ class Post(object):
 
         board = self._thread._board
         
-        return '%s://%s/%s/src/%i%s' % (
+        return '%s://%s/%s/%i%s' % (
             'https' if board._https else 'http',
             _4CHAN_IMAGES_URL,
             board.name,
@@ -465,7 +465,7 @@ class Post(object):
 
         board = self._thread._board
 
-        return '%s://%s/%s/thumb/%is.jpg' % (
+        return '%s://%s/%s/%is.jpg' % (
             'https' if board._https else 'http',
             _4CHAN_THUMBS_URL,
             board.name,
@@ -485,7 +485,7 @@ class Post(object):
     @property
     def post_url(self):
         board = self._thread._board
-        return "%s://%s/%s/res/%i#p%i" % (
+        return "%s://%s/%s/thread/%i#p%i" % (
             'https' if board._https else 'http',
             _4CHAN_BOARDS_URL,
             board.name,
