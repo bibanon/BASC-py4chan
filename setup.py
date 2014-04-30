@@ -17,12 +17,12 @@
 from setuptools import setup
 from py4chan import _VERSION
 
-setup(name='py-4chan',
+setup(name='BASC-py4chan',
     version=_VERSION,
-    description='Python 4chan API Wrapper. Modded by the Bibliotheca Anonoma to support the BA 4chan-thread-archiver',
-    author='Edgeworth Euler',
-    author_email='e@encyclopediadramatica.se',
-    url='http://github.com/bibanon/py-4chan',
+    description='Improved version of Edgeworth\'s Python 4chan API Wrapper.',
+    author='Lawrence Wu (antonizoon)',
+    author_email='sagnessagiel@gmail.com',
+    url='http://github.com/bibanon/BASC-py4chan',
     license="http://sam.zoy.org/wtfpl/COPYING",
     packages=['py4chan'],
     install_requires = ['requests >= 1.0.0']
