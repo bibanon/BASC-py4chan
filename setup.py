@@ -17,9 +17,14 @@
 from setuptools import setup
 from py4chan import _VERSION
 
+with open('README.rst') as file:
+  long_description = file.read()
+
 setup(name='BASC-py4chan',
     version=_VERSION,
     description='Improved version of Edgeworth\'s Python 4chan API Wrapper.',
+    long_description = long_description, 
+    license=open('LICENSE').read(),
     author='Lawrence Wu (antonizoon)',
     author_email='sagnessagiel@gmail.com',
     url='http://github.com/bibanon/BASC-py4chan',
