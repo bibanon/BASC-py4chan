@@ -78,7 +78,8 @@ class Thread(object):
         """
             Returns a generator that yields all the URLs of all the files (not thumbnails) in the thread.
         """
-        yield self.topic.file_url
+        if self.topic.has_file:
+            yield self.topic.file_url
         for reply in self.replies:
             if reply.has_file:
                 yield reply.file_url
@@ -87,7 +88,8 @@ class Thread(object):
         """
             Returns a generator that yields all the URLs of all the thumbnails in the thread.
         """
-        yield self.topic.thumbnail_url
+        if self.topic.has_file:
+            yield self.topic.thumbnail_url
         for reply in self.replies:
             if reply.has_file:
                 yield reply.thumbnail_url
@@ -96,7 +98,8 @@ class Thread(object):
         """
             Returns a generator that yields the filenames of all the files (not thumbnails) in the thread.
         """
-        yield self.topic.filename
+        if self.topic.has_file:
+            yield self.topic.filename
         for reply in self.replies:
             if reply.has_file:
                 yield reply.filename
@@ -105,7 +108,8 @@ class Thread(object):
         """
             Returns a generator that yields the filenames of all the thumbnails in the thread.
         """
-        yield self.topic.thumbnail_fname
+        if self.topic.has_file:
+            yield self.topic.thumbnail_fname
         for reply in self.replies:
             if reply.has_file:
                 yield reply.thumbnail_fname
