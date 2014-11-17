@@ -14,7 +14,7 @@ class Post(object):
         """
             :return: int
         """
-        return self._data['no']
+        return self._data.get('no')
     number = num = no = post_number
 
     @property
