@@ -3,7 +3,12 @@
 """
 
 import re
-from HTMLParser import HTMLParser
+
+# HTML parser was renamed in python 3.x
+try:
+    from html.parser import HTMLParser
+except ImportError:
+    from HTMLParser import HTMLParser
 
 _parser = HTMLParser()
 
