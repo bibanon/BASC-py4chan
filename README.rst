@@ -18,32 +18,29 @@ Since Edgeworth has gone MIA, the BASC has adopted the project and made
 the following improvements.
 
 -  Made by `antonizoon <https://github.com/antonizoon>`__:
+-  **4chan Link Structure Update** - 4chan has heavily reformed it's
+   link structure, finally removing the strange folder structure
+   inherited from the Futaba Channel.
+-  **4chan cdn Link update** - To save money on bandwidth. 4chan has
+   changed it's image/thumbnail/json/css servers to a domain name with
+   fewer characters.
+-  **Thread Class:** new ``filenames()`` function that return the
+   filenames of all files (not thumbnails) in a thread.
+-  **Thread Class:** new ``thumbnames()`` function that return the
+   filenames of all thumbnails in a thread.
 
-  -  **4chan Link Structure Update** - 4chan has heavily reformed it's
-    link structure, finally removing the strange folder structure
-    inherited from the Futaba Channel.
-  -  **4chan cdn Link update** - To save money on bandwidth. 4chan has
-    changed it's image/thumbnail/json/css servers to a domain name with
-    fewer characters.
-  -  **Renamed files() to images(), and any ``files`` property to
-    ``images``** - 4chan only hosts image files, so the name of this
-    function gets confusing, since it can refer to either images
-    thumbnails. The ``has_file`` and ``file_deleted`` property retains
-    it's name, though, since it refers to both thumbs and images.
-  -  **images() and thumbs()** - now return images instead of URLs. The
-    original functions have been renamed to image\_urls() and
-    thumb\_urls()
-  -  **Post Class: image\_fname and thumbnail\_fname property**
-  -  **Actual API Documentation** - Real documentation on using the
-    py-4chan library is a must. For some people, it is rocket science.
+   -  **Post Class:** new ``image_fname`` and ``thumbnail_fname``
+      properties, designed for Thread Class ``filenames()`` and
+      ``thumbnames()``.
 
+-  **Actual API Documentation** - Real documentation on using the
+   py-4chan library is a must. For some people, it is rocket science.
 -  Made by `Anorov <https://github.com/Anorov/py-4chan>`__:
-
-  -  **Anorov's underscore\_function\_notation** - Even I have to say that
+-  **Anorov's underscore\_function\_notation** - Even I have to say that
    CamelCase is beginning to suck, so we've adopted Anorov's function
    notation for py4chan. This breaks API compatibility with the original
    py-4chan, but just use find/replace to change your functions.
-  -  **Break up classes into separate files.** - Makes the code much
+-  **Break up classes into separate files.** - Makes the code much
    cleaner.
 
 If you're a developer that still uses Edgeworth's py-4chan, and are too
