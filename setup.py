@@ -25,7 +25,10 @@ setup(name='BASC-py4chan',
     author='Antonizoon (Antonizoon Overtwater)',
     author_email='antonizoon@bibanon.org',
     url='http://github.com/bibanon/BASC-py4chan',
-    packages=['py4chan'],
+    packages=['basc_py4chan'],
+    package_dir={
+        'basc_py4chan': 'py4chan',
+    },
     package_data={'': ['README.md', 'LICENSE']},
     install_requires=['requests >= 1.0.0']
 )
