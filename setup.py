@@ -15,20 +15,16 @@
 """
 
 from setuptools import setup
-from py4chan import _VERSION
-
-with open('README.rst') as file:
-  long_description = file.read()
+from py4chan import __version__
 
 setup(name='BASC-py4chan',
-    version=_VERSION,
-    description='Improved version of Edgeworth\'s Python 4chan API Wrapper.',
-    long_description = long_description, 
+    version=__version__,
+    description='Python 4chan API Wrapper. Improved version of Edgeworth\'s original py-4chan wrapper.',
+    long_description = open('README.rst').read(), 
     license=open('LICENSE').read(),
-    author='Lawrence Wu (antonizoon)',
+    author='Antonizoon (Lawrence Wu)',
     author_email='sagnessagiel@gmail.com',
     url='http://github.com/bibanon/BASC-py4chan',
-    license="http://sam.zoy.org/wtfpl/COPYING",
     packages=['py4chan'],
     install_requires = ['requests >= 1.0.0']
 )
