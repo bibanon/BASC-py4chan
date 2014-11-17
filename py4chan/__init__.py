@@ -1,5 +1,5 @@
 """
-    py-4chan
+    basc_py-4chan
     ~~~~~~~~
 
     Python Wrappers to access 4chan's API.
@@ -12,7 +12,7 @@
 
 """
 
-__version__ = '0.4.1'
+__version__ = '0.4.2'
 
 from .board import Board, board, get_boards
 from .thread import Thread
