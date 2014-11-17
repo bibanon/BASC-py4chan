@@ -48,8 +48,8 @@ If you're a developer that still uses Edgeworth's py-4chan, and are too lazy to 
 ## Usage
 
 ``` python
-import py4chan
-b = py4chan.Board('b')
+import basc_py4chan
+b = basc_py4chan.Board('b')
 thread = b.get_thread(423491034)
 
 print thread
