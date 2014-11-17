@@ -1,8 +1,12 @@
-BASC py4chan
+BASC-py4chan
 ============
 
-Python Wrapper for 4chan API. Uses requests, respects if-modified-since
-headers on updating threads. Caches thread objects. Fun stuff.
+The Bibliotheca Anonoma's **complete Python Wrapper for the 4chan API.**
+Uses requests, respects if-modified-since headers on updating threads.
+Caches thread objects. Fun stuff.
+
+An absolute must if you want to interface with or scrape from 4chan,
+using a Python script.
 
 `You can install this wrapper library straight from
 PyPi <https://pypi.python.org/pypi/BASC-py4chan>`__.
@@ -17,7 +21,10 @@ Changelog
 Since Edgeworth has gone MIA, the BASC has adopted the project and made
 the following improvements.
 
--  Made by `antonizoon <https://github.com/antonizoon>`__:
+(we might need to move this to documentation)
+
+Changes by `antonizoon <https://github.com/antonizoon>`__:
+
 -  **4chan Link Structure Update** - 4chan has heavily reformed it's
    link structure, finally removing the strange folder structure
    inherited from the Futaba Channel.
@@ -35,13 +42,46 @@ the following improvements.
 
 -  **Actual API Documentation** - Real documentation on using the
    py-4chan library is a must. For some people, it is rocket science.
--  Made by `Anorov <https://github.com/Anorov/py-4chan>`__:
+
+--------------
+
+Changes by `Anorov <https://github.com/Anorov/py-4chan>`__:
+
 -  **Anorov's underscore\_function\_notation** - Even I have to say that
    CamelCase is beginning to suck, so we've adopted Anorov's function
    notation for py4chan. This breaks API compatibility with the original
    py-4chan, but just use find/replace to change your functions.
 -  **Break up classes into separate files.** - Makes the code much
    cleaner.
+-  Thread Class: ``expand()`` function, used to display omitted posts
+   and images. Used by all\_posts().
+-  Thread Class: ``semantic_thread_url()`` function, used to obtain
+   4chan's new URL format, which tacks on the thread title (obtained
+   from ``slug()``).
+-  Post Class: ``comment()`` has been modified to use
+   ``clean_comment_body()`` when returning a comment. The raw text from
+   the 4chan API can still be obtained from ``orig_comment()``.
+
+   -  Util Class: ``clean_comment_body()`` function, which converts all
+      HTML tags and entities within 4chan comments into human-readable
+      text equivalents.(e.g. ``<br>`` to a newline, ``<a href>`` into a
+      raw link)
+
+-  Board Class: ``_get_json()`` function, which dumps the raw JSON from
+   the 4chan API.
+-  A whole host of new Catalog parsing functions:
+
+   -  Board Class: ``refresh_cache()`` and ``clear_cache()`` - Get the
+      latest Catalog of all threads in the board, or clear the current
+      cache.
+   -  Board Class: ``get_threads(page)`` - Get a list of all threads on
+      a certain page. (Pages are now indexed starting from 1).
+   -  Board Class: ``get_all_thread_ids()`` - Get a list of all thread
+      IDs on the board.
+   -  Board Class: ``get_all_threads()`` - Return all threads on all
+      pages in the board.
+
+--------------
 
 If you're a developer that still uses Edgeworth's py-4chan, and are too
 lazy to change the function names, the BASC still maintains `an
