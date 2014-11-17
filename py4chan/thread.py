@@ -96,10 +96,10 @@ class Thread(object):
         """
             Returns a generator that yields the filenames of all the files (not thumbnails) in the thread.
         """
-        yield self.topic.file_fname
+        yield self.topic.filename
         for reply in self.replies:
             if reply.has_file:
-                yield reply.file_fname
+                yield reply.filename
 
     def thumbnames(self):
         """

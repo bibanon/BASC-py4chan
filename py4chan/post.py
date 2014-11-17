@@ -79,7 +79,7 @@ class Post(object):
         return self.file_md5.encode('hex')
 
     @property
-    def file_fname(self):
+    def filename(self):
         if not self.has_file:
             return None
 

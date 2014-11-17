@@ -21,7 +21,7 @@ Changes by [antonizoon](https://github.com/antonizoon):
 * **4chan cdn Link update** - To save money on bandwidth. 4chan has changed it's image/thumbnail/json/css servers to a domain name with fewer characters.
 * **Thread Class:** new `filenames()` function that return the filenames of all files (not thumbnails) in a thread.
 * **Thread Class:** new `thumbnames()` function that return the filenames of all thumbnails in a thread.
-    * **Post Class:** new `image_fname` and `thumbnail_fname` properties, designed for Thread Class `filenames()` and `thumbnames()`.
+    * **Post Class:** new `filename` and `thumbnail_fname` properties, designed for Thread Class `filenames()` and `thumbnames()`.
 * **Actual API Documentation** - Real documentation on using the py-4chan library is a must. For some people, it is rocket science.
 
 ---
