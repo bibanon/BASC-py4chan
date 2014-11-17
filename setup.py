@@ -26,5 +26,6 @@ setup(name='BASC-py4chan',
     author_email='antonizoon@bibanon.org',
     url='http://github.com/bibanon/BASC-py4chan',
     packages=['py4chan'],
-    install_requires = ['requests >= 1.0.0']
+    package_data={'': ['README.md', 'LICENSE']},
+    install_requires=['requests >= 1.0.0']
 )
