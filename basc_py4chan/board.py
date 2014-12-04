@@ -32,35 +32,36 @@ class Board(object):
         res.raise_for_status()
         return res.json()
 
-    def get_thread(self, id, update_if_cached=True):
+    def get_thread(self, thread_id, update_if_cached=True):
         """
             Get a thread from 4chan via 4chan API.
 
-            :param id: Thread ID
+            :param thread_id: Thread ID
             :param update_if_cached: Should the thread be updated if it's found in the cache?
             :return: Thread
         """
-        if id in self._thread_cache:
-            thread = self._thread_cache[id]
+        if thread_id in self._thread_cache:
+            thread = self._thread_cache[thread_id]
             if update_if_cached:
                 thread.update()
 
             return thread
 
-        res = self._requests_session.get(self._thread_path % id)
+        res = self._requests_session.get(self._thread_path % thread_id)
 
-        thread = Thread._from_request(self, res, id)
-        self._thread_cache[id] = thread
+        thread = Thread._from_request(self, res, thread_id)
+        self._thread_cache[thread_id] = thread
 
         return thread
 
-    def thread_exists(self, id):
+    def thread_exists(self, thread_id):
         """
             Check if a thread exists, or is 404.
-            :param id: Thread ID
+
+            :param thread_id: Thread ID
             :return: bool
         """
-        return self._requests_session.head(self._thread_path % id).ok
+        return self._requests_session.head(self._thread_path % thread_id).ok
 
     def _catalog_to_threads(self, json):
         threads_json = [thread for page in json for thread in page['threads']]
