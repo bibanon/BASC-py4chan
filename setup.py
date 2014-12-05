@@ -15,7 +15,7 @@
 """
 
 from setuptools import setup
-from py4chan import __version__
+from basc_py4chan import __version__
 
 setup(name='BASC-py4chan',
     version=__version__,
