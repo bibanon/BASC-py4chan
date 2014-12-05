@@ -16,6 +16,20 @@ Here is a sample application that grabs and uses Board information, :file:`examp
 .. module:: basc_py4chan
 .. autoclass:: basc_py4chan.Board
 
+    .. automethod:: basc_py4chan.Board.__init__
+
     .. automethod:: basc_py4chan.Board.thread_exists
 
     .. automethod:: basc_py4chan.Board.get_thread
+
+    .. automethod:: basc_py4chan.Board.get_threads
+
+    .. automethod:: basc_py4chan.Board.get_all_threads
+
+    .. automethod:: basc_py4chan.Board.get_all_thread_ids
+
+    .. automethod:: basc_py4chan.Board.refresh_cache
+
+    .. automethod:: basc_py4chan.Board.clear_cache
+
+    .. autoattribute:: basc_py4chan.Board.name

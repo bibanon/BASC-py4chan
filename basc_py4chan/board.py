@@ -10,8 +10,23 @@ def get_boards(board_name_list, *args, **kwargs):
     return [Board(name, *args, **kwargs) for name in board_name_list]
 
 class Board(object):
+    """Represents a 4chan board.
+
+    Attributes:
+        name (str): Name of this board, such as ``tg`` or ``k``
+    """
     def __init__(self, board_name, https=False, clean_comments=True,
                  api_url=URL['api'], session=None):
+        """Creates a :mod:`basc_py4chan.Board` object.
+
+        Args:
+            board_name (string): Name of the board, such as "tg" or "etc".
+            https (bool): Whether to use a secure connection to 4chan.
+            clean_comments (bool): Whether post objects will try to parse HTML comments
+                (HTML entities, tags and links) into "cleaned" plaintext.
+            api_url: Base 4chan API URL. This will be automatically set in all cases.
+            session: Existing requests.session object to use instead of our current one.
+        """
         self._board_name = board_name
         self._protocol = 'https://' if https else 'http://'
         self._clean_comments = clean_comments
@@ -33,12 +48,14 @@ class Board(object):
         return res.json()
 
     def get_thread(self, thread_id, update_if_cached=True):
-        """
-            Get a thread from 4chan via 4chan API.
+        """Get a thread from 4chan via 4chan API.
 
-            :param thread_id: Thread ID
-            :param update_if_cached: Should the thread be updated if it's found in the cache?
-            :return: Thread
+        Args:
+            thread_id (int): Thread ID
+            update_if_cached (bool): Whether the thread should be updated if it's already in our cache
+
+        Returns:
+            :class:`basc_py4chan.Thread`: Thread object
         """
         if thread_id in self._thread_cache:
             thread = self._thread_cache[thread_id]
@@ -55,11 +72,13 @@ class Board(object):
         return thread
 
     def thread_exists(self, thread_id):
-        """
-            Check if a thread exists, or is 404.
+        """Check if a thread exists or has 404'd.
 
-            :param thread_id: Thread ID
-            :return: bool
+        Args:
+            thread_id (int): Thread ID
+
+        Returns:
+            bool: Whether the given thread exists on this board.
         """
         return self._requests_session.head(self._thread_path % thread_id).ok
 
@@ -96,38 +115,48 @@ class Board(object):
         return threads
 
     def get_threads(self, page=1):
-        """
-            Get all threads on a certain page. Pages are now indexed at 1, instead of 0.
-            If the thread is already in cache, return cached thread entry.
+        """Returns all threads on a certain page.
 
-            Sets thread.want_update to True if the thread is being returned from the cache.
-            :param: page: Page to fetch thread from
-            :return: list[Thread]
+        Gets a list of Thread objects for every thread on the given page. If a thread is
+        already in our cache, the cached version is returned and thread.want_update is
+        set to True on the specific thread object.
+
+        Pages on 4chan are indexed from 1 onwards.
+
+        Args:
+            page (int): Page to request threads for. Defaults to the first page.
+
+        Returns:
+            list: List of Thread objects representing the threads on the given page.
         """
         return self._request_threads(page)
 
     def get_all_thread_ids(self):
-        """
-            Return a list of all thread IDs.
+        """Return the ID of every thread on this board.
 
-            :return: list[int]
+        Returns:
+            list: List of IDs of every thread on this board.
         """
         json = self._get_json(ALL_THREADS)
         return [thread['no'] for page in json for thread in page['threads']]
 
     def get_all_threads(self, expand=False):
-        """
-            Return all threads on all pages.
+        """Return every thread on this board.
 
-            If not expanded, result is same as get_threads run across all board pages,
-            with last 3-5 replies included.
+        If not expanded, result is same as get_threads run across all board pages,
+        with last 3-5 replies included.
 
-            Uses the catalog when not expanding, and uses the flat thread ID listing
-            at /{board}/threads.json when expanding for more efficient resource usage.
+        Uses the catalog when not expanding, and uses the flat thread ID listing
+        at /{board}/threads.json when expanding for more efficient resource usage.
 
-            If expanded, all data of all threads is returned with no omitted posts.
-            :param: expand: Whether or not to expand threads
-            :return: list[Thread]
+        If expanded, all data of all threads is returned with no omitted posts.
+
+        Args:
+            expand (bool): Whether to download every single post of every thread.
+                If enabled, this option can be very slow and bandwidth-intensive.
+
+        Returns:
+            list: List of Thread objects representing every thread on this board.
         """
         if not expand:
             return self._request_threads(CATALOG)
@@ -138,9 +167,7 @@ class Board(object):
         return filter(None, threads)
 
     def refresh_cache(self, if_want_update=False):
-        """
-            Update all threads currently stored in the cache.
-        """
+        """Update all threads currently stored in our cache."""
         for thread in self._thread_cache.values():
             if if_want_update:
                 if not thread.want_update:
@@ -148,17 +175,11 @@ class Board(object):
             thread.update()
 
     def clear_cache(self):
-        """
-            Remove everything currently stored in the cache.
-        """
+        """Remove everything currently stored in our cache."""
         self._thread_cache.clear()
 
     @property
     def name(self):
-        """
-            Board name that this board represents.
-            :return: string
-        """
         return self._board_name
 
     def __repr__(self):
