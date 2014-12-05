@@ -127,7 +127,7 @@ class Board(object):
             page (int): Page to request threads for. Defaults to the first page.
 
         Returns:
-            list: List of Thread objects representing the threads on the given page.
+            list of :mod:`basc_py4chan.Thread`: List of Thread objects representing the threads on the given page.
         """
         return self._request_threads(page)
 
@@ -135,7 +135,7 @@ class Board(object):
         """Return the ID of every thread on this board.
 
         Returns:
-            list: List of IDs of every thread on this board.
+            list of ints: List of IDs of every thread on this board.
         """
         json = self._get_json(ALL_THREADS)
         return [thread['no'] for page in json for thread in page['threads']]
@@ -156,7 +156,7 @@ class Board(object):
                 If enabled, this option can be very slow and bandwidth-intensive.
 
         Returns:
-            list: List of Thread objects representing every thread on this board.
+            list of :mod:`basc_py4chan.Thread`: List of Thread objects representing every thread on this board.
         """
         if not expand:
             return self._request_threads(CATALOG)
