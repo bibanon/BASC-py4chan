@@ -3,7 +3,7 @@
 
 :class:`basc_py4chan.Board` provides access to a 4chan board including checking if threads exist, retrieving appropriate :class:`basc_py4chan.Thread` objects, and returning lists of all the threads that exist on the given board.
 
-Here is a sample application that grabs and uses Board information, :file:`example.py`::
+Here is a sample application that grabs and uses Board information::
 
     from __future__ import print_function
     import basc_py4chan
