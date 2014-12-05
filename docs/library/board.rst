@@ -1,7 +1,7 @@
-:mod:`basc_py4chan.Board` – Access to 4chan Boards
+:class:`basc_py4chan.Board` – Access to 4chan Boards
 ==================================================
 
-:mod:`basc_py4chan.Board` allows for standard access to a 4chan board, including checking if threads exist, retrieving appropriate :mod:`basc_py4chan.Thread` objects, and returning lists of all the threads that exist on the given board.
+:class:`basc_py4chan.Board` allows for standard access to a 4chan board, including checking if threads exist, retrieving appropriate :class:`basc_py4chan.Thread` objects, and returning lists of all the threads that exist on the given board.
 
 Here is a sample application that grabs and uses Board information, :file:`example.py`::
 
@@ -13,7 +13,6 @@ Here is a sample application that grabs and uses Board information, :file:`examp
     print('Active threads on /tg/:', ', '.join(str_thread_ids))
 
 
-.. module:: basc_py4chan
 .. autoclass:: basc_py4chan.Board
 
     .. automethod:: basc_py4chan.Board.__init__
@@ -31,5 +30,3 @@ Here is a sample application that grabs and uses Board information, :file:`examp
     .. automethod:: basc_py4chan.Board.refresh_cache
 
     .. automethod:: basc_py4chan.Board.clear_cache
-
-    .. autoattribute:: basc_py4chan.Board.name

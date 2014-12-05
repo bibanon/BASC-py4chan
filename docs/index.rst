@@ -6,9 +6,11 @@ Originally written by `Edgeworth <https://github.com/e000/py-4chan>`_, the libra
 
 We're currently writing up the documentation for this module, so stick with us while we flesh out the library documentation and the rest of it!
 
-Contents:
+API Documentation
+-----------------
 
 .. toctree::
    :maxdepth: 2
 
    library/board
+   library/thread

@@ -2,6 +2,17 @@ from .url import URL
 from .post import Post
 
 class Thread(object):
+    """Represents a 4chan thread.
+
+    Attributes:
+        closed (bool): Whether the thread has been closed.
+        sticky (bool): Whether this thread is a 'sticky'.
+        posts (list): List of all posts in the thread, including the OP.
+        all_posts (list): List of all posts in the thread, including the OP and any omitted posts.
+        slug (string): The 'pretty URL slug' assigned to this thread by 4chan.
+        thread_url (string): URL of the thread, not including semantic slug.
+        semantic_thread_url (string): URL of the thread, with the semantic slug.
+    """
     def __init__(self, board, id):
         self._board = board
         self.id = self.number = self.num = self.no = id
@@ -23,18 +34,10 @@ class Thread(object):
 
     @property
     def closed(self):
-        """
-            Is the thread closed?
-            :return: bool
-        """
         return self.topic._data.get('closed') == 1
 
     @property
     def sticky(self):
-        """
-            Is the thread sticky?
-            :return: bool
-        """
         return self.topic._data.get('sticky') == 1
 
     @classmethod
@@ -75,9 +78,7 @@ class Thread(object):
         return t
 
     def files(self):
-        """
-            Returns a generator that yields all the URLs of all the files (not thumbnails) in the thread.
-        """
+        """Returns the URLs of all files attached to posts in the thread."""
         if self.topic.has_file:
             yield self.topic.file_url
         for reply in self.replies:
@@ -85,9 +86,7 @@ class Thread(object):
                 yield reply.file_url
 
     def thumbs(self):
-        """
-            Returns a generator that yields all the URLs of all the thumbnails in the thread.
-        """
+        """Returns the URLs of all thumbnails in the thread."""
         if self.topic.has_file:
             yield self.topic.thumbnail_url
         for reply in self.replies:
@@ -95,9 +94,7 @@ class Thread(object):
                 yield reply.thumbnail_url
 
     def filenames(self):
-        """
-            Returns a generator that yields the filenames of all the files (not thumbnails) in the thread.
-        """
+        """Returns the filenames of all files attached to posts in the thread."""
         if self.topic.has_file:
             yield self.topic.filename
         for reply in self.replies:
@@ -105,9 +102,7 @@ class Thread(object):
                 yield reply.filename
 
     def thumbnames(self):
-        """
-            Returns a generator that yields the filenames of all the thumbnails in the thread.
-        """
+        """Returns the filenames of all thumbnails in the thread."""
         if self.topic.has_file:
             yield self.topic.thumbnail_fname
         for reply in self.replies:
@@ -115,10 +110,13 @@ class Thread(object):
                 yield reply.thumbnail_fname
 
     def update(self, force=False):
-        """
-            Fetch new posts from the server. Returns an integer with the number of new posts.
-            :param: force: Force thread update.
-            :return: int: How many new posts fetched.
+        """Fetch new posts from the server.
+
+        Arguments:
+            force (bool): Force a thread update, even if thread has 404'd.
+
+        Returns:
+            int: How many new posts have been fetched.
         """
 
         # The thread has already 404'ed, this function shouldn't do anything anymore.
@@ -179,24 +177,16 @@ class Thread(object):
             res.raise_for_status()
 
     def expand(self):
-        """
-            If there are some omitted posts, update with all posts.
-        """
+        """If there are omitted posts, update to include all posts."""
         if self.omitted_posts > 0:
             self.update()
 
     @property
     def posts(self):
-        """
-            List of all posts in the thread, including the OP.
-        """
         return [self.topic] + self.replies
 
     @property
     def all_posts(self):
-        """
-            List of all posts in the thread, including the OP and any omitted posts.
-        """
         self.expand()
         return self.posts
 
