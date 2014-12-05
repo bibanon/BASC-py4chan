@@ -29,6 +29,6 @@ setup(name='BASC-py4chan',
     package_dir={
         'basc_py4chan': 'basc_py4chan',
     },
-    package_data={'': ['README.md', 'LICENSE']},
+    package_data={'': ['README.rst', 'LICENSE']},
     install_requires=['requests >= 1.0.0']
 )
