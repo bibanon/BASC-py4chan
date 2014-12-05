@@ -24,3 +24,4 @@ API Documentation
 
    library/board
    library/thread
+   library/post
