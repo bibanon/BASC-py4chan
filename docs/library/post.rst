@@ -3,10 +3,9 @@
 
 :class:`basc_py4chan.Post` allows for standard access to a 4chan post.
 
-Here is a sample application that grabs and prints :class:`basc_pychan.Thread` and :class:`basc_python.Post` information:
+Here is a sample application that grabs and prints :class:`basc_py4chan.Thread` and :class:`basc_py4chan.Post` information:
 
 .. code-block:: python
-    :linenos:
 
     # credits to Anarov for improved example
     from __future__ import print_function
