@@ -4,7 +4,7 @@ from .url import URL
 from .util import clean_comment_body
 
 class Post(object):
-    """Represents a post on 4chan.
+    """Represents a 4chan post.
 
     Attributes:
         post_number (int): Number of this post relative to the thread. Eg: ``4``, ``6``, ``7``, ``8``.
