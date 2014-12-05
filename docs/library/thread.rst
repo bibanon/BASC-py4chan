@@ -1,5 +1,5 @@
-:class:`basc_py4chan.Thread` – Access to 4chan Boards
-==================================================
+:class:`basc_py4chan.Thread` – 4chan Threads
+============================================
 
 :class:`basc_py4chan.Thread` allows for standard access to a 4chan thread, including listing all the posts in the thread, information such as whether the thread is locked and stickied, and lists of attached file URLs or thumbnails.
 

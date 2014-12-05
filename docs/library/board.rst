@@ -1,7 +1,7 @@
-:class:`basc_py4chan.Board` – Access to 4chan Boards
-==================================================
+:class:`basc_py4chan.Board` – 4chan Boards
+==========================================
 
-:class:`basc_py4chan.Board` allows for standard access to a 4chan board, including checking if threads exist, retrieving appropriate :class:`basc_py4chan.Thread` objects, and returning lists of all the threads that exist on the given board.
+:class:`basc_py4chan.Board` provides access to a 4chan board including checking if threads exist, retrieving appropriate :class:`basc_py4chan.Thread` objects, and returning lists of all the threads that exist on the given board.
 
 Here is a sample application that grabs and uses Board information, :file:`example.py`::
 
