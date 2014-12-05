@@ -1,1 +1,2 @@
 requests
+sphinxcontrib-napoleon
