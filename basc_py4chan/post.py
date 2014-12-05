@@ -4,6 +4,35 @@ from .url import URL
 from .util import clean_comment_body
 
 class Post(object):
+    """Represents a post on 4chan.
+
+    Attributes:
+        post_number (int): Number of this post relative to the thread. Eg: ``4``, ``6``, ``7``, ``8``.
+        id (int): Post ID.
+        name (string): Poster's name.
+        email (string): Poster's email.
+        tripcode (string): Poster's tripcode.
+        subject (string): Subject of this post.
+        orig_comment (string): Original, direct HTML of this comment.
+        comment (string): Comment data, either cleaned or not depending.
+        timestamp (int): Unix timestamp for this post.
+        datetime (:class:`datetime.datetime`): Datetime time of this post.
+        file_md5 (string): MD5 hash of the file attached to this post.
+        file_md5_hex (string): Hex-encoded MD5 hash of the file attached to this post.
+        filename (string): Original name of the file attached to this post.
+        file_url (string): URL of the file attached to this post.
+        file_extension (string): Extension of the file attached to this post. Eg: ``png``, ``webm``, etc.
+        file_size (int): Size of the file attached to this post.
+        file_width (int): Width of the file attached to this post.
+        file_height (int): Height of the file attached to this post.
+        file_deleted (bool): Whether the file attached to this post was deleted after being posted.
+        thumbnail_width (int): Width of the thumbnail attached to this post.
+        thumbnail_height (int): Height of the thumbnail attached to this post.
+        thumbnail_fname (string): Filename of the thumbnail attached to this post.
+        thumbnail_url (strig): URL of the thumbnail attached to this post.
+        has_file (bool): Whether this post has a file attached to it.
+        post_url (string): URL of this post.
+    """
     def __init__(self, thread, data):
         self._thread = thread
         self._data = data
@@ -11,17 +40,11 @@ class Post(object):
 
     @property
     def post_number(self):
-        """
-            :return: int
-        """
         return self._data.get('no')
     number = num = no = post_number
 
     @property
     def id(self):
-        """
-            :return: int
-        """
         return self._data.get('id')
 
     @property

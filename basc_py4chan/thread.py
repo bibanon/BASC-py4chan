@@ -7,8 +7,8 @@ class Thread(object):
     Attributes:
         closed (bool): Whether the thread has been closed.
         sticky (bool): Whether this thread is a 'sticky'.
-        posts (list): List of all posts in the thread, including the OP.
-        all_posts (list): List of all posts in the thread, including the OP and any omitted posts.
+        posts (list of :class:`basc_py4chan.Post`): List of all posts in the thread, including the OP.
+        all_posts (list of :class:`basc_py4chan.Post`): List of all posts in the thread, including the OP and any omitted posts.
         slug (string): The 'pretty URL slug' assigned to this thread by 4chan.
         thread_url (string): URL of the thread, not including semantic slug.
         semantic_thread_url (string): URL of the thread, with the semantic slug.
