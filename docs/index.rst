@@ -9,6 +9,8 @@ Originally written by `Edgeworth <https://github.com/e000/py-4chan>`_, the libra
 
     However, we recommend that **all users** switch to BASC-py4chan. This module is more Pythonic, has better support, documentation, and will be gaining new features.
 
+The BASC-py4chan repository is located `on Github <https://github.com/bibanon/BASC-py4chan>`_, where pull requests and issues can be submitted.
+
 We're currently writing up the documentation for this module, so stick with us while we flesh out the library documentation and the rest of it!
 
 .. toctree::

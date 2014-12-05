@@ -3,6 +3,9 @@
 
 :class:`basc_py4chan.Post` allows for standard access to a 4chan post.
 
+Example
+-------
+
 Here is a sample application that grabs and prints :class:`basc_py4chan.Thread` and :class:`basc_py4chan.Post` information:
 
 .. code-block:: python
@@ -38,6 +41,8 @@ Here is a sample application that grabs and prints :class:`basc_py4chan.Thread` 
     print('Replies',    thread.replies)
     print('All posts',  thread.all_posts)
 
+Basic Usage
+-----------
 
 .. autoclass:: basc_py4chan.Post
 
