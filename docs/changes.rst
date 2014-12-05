@@ -62,3 +62,11 @@ Changes by `Anorov <https://github.com/Anorov/py-4chan>`_
       IDs on the board.
    -  Board Class: ``get_all_threads()`` - Return all threads on all
       pages in the board.
+
+
+Changes by `Daniel Oaks <https://github.com/DanielOaks>`_
+---------------------------------------------------------
+
+- **ReadTheDocs Documentation** - Splitting the documentation out to
+  `ReadTheDocs <http://readthedocs.org>`_, using
+  `Sphinx <http://sphinx-doc.org/>`_ to generate nice, useful docs!
