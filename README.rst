@@ -8,6 +8,8 @@ Caches thread objects. Fun stuff.
 An absolute must if you want to interface with or scrape from 4chan,
 using a Python script.
 
+Documentation is located `here <http://basc-py4chan.readthedocs.org/en/latest/index.html>`_, still being written but already quite useful.
+
 `You can install this wrapper library straight from
 PyPi <https://pypi.python.org/pypi/BASC-py4chan>`__.
 
@@ -23,7 +25,7 @@ the following improvements.
 
 (we might need to move this to documentation)
 
-Changes by `antonizoon <https://github.com/antonizoon>`__:
+Changes by `antonizoon <https://github.com/antonizoon>`_:
 
 -  **4chan Link Structure Update** - 4chan has heavily reformed it's
    link structure, finally removing the strange folder structure
@@ -45,7 +47,7 @@ Changes by `antonizoon <https://github.com/antonizoon>`__:
 
 --------------
 
-Changes by `Anorov <https://github.com/Anorov/py-4chan>`__:
+Changes by `Anorov <https://github.com/Anorov/py-4chan>`_:
 
 -  **Anorov's underscore\_function\_notation** - Even I have to say that
    CamelCase is beginning to suck, so we've adopted Anorov's function
