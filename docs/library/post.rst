@@ -3,6 +3,39 @@
 
 :class:`basc_py4chan.Post` allows for standard access to a 4chan post.
 
+Here is a sample application that grabs and prints :class:`basc_pychan.Thread` and :class:`basc_python.Post` information, :file:`example1.py`::
+
+    # credits to Anarov for improved example
+    from __future__ import print_function
+    import basc_py4chan
+
+    # get the board we want
+    board = basc_py4chan.Board('v')
+
+    # select the first thread on the board
+    all_thread_ids = board.get_all_thread_ids()
+    first_thread_id = all_thread_ids[0]
+    thread = board.get_thread(first_thread_id)
+
+    # print thread information
+    print(thread)
+    print('Sticky?', thread.sticky)
+    print('Closed?', thread.closed)
+
+    # print topic post information
+    topic = thread.topic
+    print('Topic Repr', topic)
+    print('Postnumber', topic.post_number)
+    print('Timestamp',  topic.timestamp)
+    print('Datetime',   repr(topic.datetime))
+    print('Filemd5hex', topic.file_md5_hex)
+    print('Fileurl',    topic.file_url)
+    print('Subject',    topic.subject)
+    print('Comment',    topic.comment)
+    print('Thumbnailurl',topic.thumbnail_url)
+    print('Replies',    thread.replies)
+    print('All posts',  thread.all_posts)
+
 
 .. autoclass:: basc_py4chan.Post
 
