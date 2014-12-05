@@ -8,8 +8,6 @@ Caches thread objects. Fun stuff.
 An absolute must if you want to interface with or scrape from 4chan,
 using a Python script.
 
-Documentation is located `here <http://basc-py4chan.readthedocs.org/en/latest/index.html>`_, still being written but already quite useful.
-
 `You can install this wrapper library straight from
 PyPi <https://pypi.python.org/pypi/BASC-py4chan>`__.
 
@@ -41,8 +39,7 @@ Usage
     # In a while...
     print "I fetched", thread.update(), "new replies."
 
-API Documentation coming soon, but for now, figure it out from the
-source.
+Documentation is located `here <http://basc-py4chan.readthedocs.org/en/latest/index.html>`_.
 
 License
 -------
