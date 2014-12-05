@@ -16,6 +16,7 @@ We're currently writing up the documentation for this module, so stick with us w
 .. toctree::
    :maxdepth: 2
 
+   changes
    faq
 
 API Documentation
