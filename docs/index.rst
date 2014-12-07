@@ -13,6 +13,9 @@ The BASC-py4chan repository is located `on Github <https://github.com/bibanon/BA
 
 We're currently writing up the documentation for this module, so stick with us while we flesh out the library documentation and the rest of it!
 
+General Documentation
+---------------------
+
 .. toctree::
    :maxdepth: 2
 

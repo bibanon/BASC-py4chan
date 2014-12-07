@@ -29,7 +29,7 @@ class Post(object):
         thumbnail_width (int): Width of the thumbnail attached to this post.
         thumbnail_height (int): Height of the thumbnail attached to this post.
         thumbnail_fname (string): Filename of the thumbnail attached to this post.
-        thumbnail_url (strig): URL of the thumbnail attached to this post.
+        thumbnail_url (string): URL of the thumbnail attached to this post.
         has_file (bool): Whether this post has a file attached to it.
         post_url (string): URL of this post.
     """
