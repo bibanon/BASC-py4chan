@@ -1,6 +1,6 @@
 4chan Python Library
 ====================
-BASC-py4chan is a Python library that gives access to the 4chan API and an object-oriented way to browse and get board and thread information quickly and easily.
+*BASC-py4chan* is a Python library that gives access to the 4chan API and an object-oriented way to browse and get board and thread information quickly and easily.
 
 Originally written by `Edgeworth <https://github.com/e000/py-4chan>`_, the library has been adopted and extended by `Bibliotheca Anonoma <https://github.com/bibanon>`_.
 
