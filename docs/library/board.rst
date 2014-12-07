@@ -14,7 +14,7 @@ Here is a sample application that grabs and uses Board information::
     board = basc_py4chan.Board('tg')
     thread_ids = board.get_all_thread_ids()
     str_thread_ids = [str(id) for id in thread_ids]  # need to do this so str.join below works
-    print(len(all_ids), 'active threads on /tg/:', ', '.join(str_thread_ids))
+    print('There are', len(all_ids), 'active threads on /tg/:', ', '.join(str_thread_ids))
 
 Basic Usage
 -----------
