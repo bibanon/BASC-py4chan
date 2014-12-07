@@ -11,23 +11,28 @@ Originally written by `Edgeworth <https://github.com/e000/py-4chan>`_, the libra
 
 The BASC-py4chan repository is located `on Github <https://github.com/bibanon/BASC-py4chan>`_, where pull requests and issues can be submitted.
 
-We're currently writing up the documentation for this module, so stick with us while we flesh out the library documentation and the rest of it!
+
+Getting Help
+------------
+If you want help, or you have some trouble using this library, our primary IRC channel is `#bibanon on irc.rizon.net <http://qchat2.rizon.net/?channels=bibanon>`_. Simply head in there and talk to dan or antonizoon. Otherwise, you can put a issue on our `Github Issue Tracker <https://github.com/bibanon/BASC-py4chan>`_ and we'll respond when we can!
+
 
 General Documentation
 ---------------------
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   changes
-   faq
+    tutorial
+    changes
+    faq
 
 API Documentation
 -----------------
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   library/board
-   library/thread
-   library/post
+    library/board
+    library/thread
+    library/post
