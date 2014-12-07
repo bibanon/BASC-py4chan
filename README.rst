@@ -8,6 +8,8 @@ Caches thread objects. Fun stuff.
 An absolute must if you want to interface with or scrape from 4chan,
 using a Python script.
 
+`Hosted Documentation <http://basc-py4chan.readthedocs.org/en/latest/index.html>`_
+
 `You can install this wrapper library straight from
 PyPi <https://pypi.python.org/pypi/BASC-py4chan>`__.
 
