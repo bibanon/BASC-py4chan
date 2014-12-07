@@ -10,8 +10,8 @@ using a Python script.
 
 `Hosted Documentation <http://basc-py4chan.readthedocs.org/en/latest/index.html>`_
 
-You can install this library straight from
-`PyPi <https://pypi.python.org/pypi/BASC-py4chan>`__ with::
+You can install this library `straight from
+PyPi <https://pypi.python.org/pypi/BASC-py4chan>`_ with::
 
     pip install basc-py4chan
 
