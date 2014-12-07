@@ -10,19 +10,21 @@ using a Python script.
 
 `Hosted Documentation <http://basc-py4chan.readthedocs.org/en/latest/index.html>`_
 
-`You can install this wrapper library straight from
-PyPi <https://pypi.python.org/pypi/BASC-py4chan>`__.
+You can install this library straight from
+`PyPi <https://pypi.python.org/pypi/BASC-py4chan>`__ with::
+
+    pip install basc-py4chan
 
 This is the Bibliotheca Anonoma StoryCorps' (BASC) updated fork of
 py4chan, based on `Edgeworth's outdated
-original. <https://github.com/e000/py-4chan>`__
+original. <https://github.com/e000/py-4chan>`_
 
 --------------
 
 If you're a developer that still uses Edgeworth's py-4chan, and are too
 lazy to change the function names, the BASC still maintains `an
 up-to-date, API compatible version of py-4chan
-here. <https://github.com/bibanon/py-4chan>`__
+here. <https://github.com/bibanon/py-4chan>`_
 
 Usage
 -----
