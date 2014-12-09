@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """
     py-4chan-setup
@@ -19,8 +20,8 @@ from basc_py4chan import __version__
 
 setup(name='BASC-py4chan',
     version=__version__,
-    description='Python 4chan API Wrapper. Improved version of Edgeworth\'s original py-4chan wrapper.',
-    long_description = open('README.rst').read(), 
+    description="Python 4chan API Wrapper. Improved version of Edgeworth's original py-4chan wrapper.",
+    long_description = open('README.rst').read(),
     license=open('LICENSE').read(),
     author='Antonizoon (Antonizoon Overtwater)',
     author_email='antonizoon@bibanon.org',

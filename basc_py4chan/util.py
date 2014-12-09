@@ -1,6 +1,6 @@
-"""
-    Utility functions.
-"""
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""Utility functions."""
 
 import re
 
@@ -13,9 +13,10 @@ except ImportError:
 _parser = HTMLParser()
 
 def clean_comment_body(body):
-    """
-        Convert all HTML tags and entities within 4chan comments
-        into human-readable text equivalents.
+    """Returns given comment HTML as plaintext.
+
+    Converts all HTML tags and entities within 4chan comments
+    into human-readable text equivalents.
     """
     body = _parser.unescape(body)
     body = re.sub(r'<a [^>]+>(.+?)</a>', r'\1', body)
