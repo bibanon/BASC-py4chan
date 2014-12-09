@@ -1,8 +1,3 @@
-.. force line break
-.. |br| raw:: html
-
-   <br />
-
 4chan Python Library
 ====================
 The Bibliotheca Anonoma's **complete Python Wrapper for the 4chan API.**
@@ -14,26 +9,26 @@ using a Python script.
 
 `Hosted Documentation <http://basc-py4chan.readthedocs.org/en/latest/index.html>`_
 
+`Github Repository <https://github.com/bibanon/BASC-py4chan>`_
+
 You can install this library `straight from
 PyPi <https://pypi.python.org/pypi/BASC-py4chan>`_ with::
 
     pip install basc-py4chan
 
-The BASC-py4chan repository is located `on Github <https://github.com/bibanon/BASC-py4chan>`_,
-where pull requests and issues can be submitted.
 
+**Getting Help**
 
-**Getting Help** |br|
 If you want help, or you have some trouble using this library, our primary IRC channel
 is `#bibanon on irc.rizon.net <http://qchat2.rizon.net/?channels=bibanon>`_. Simply head
-in there and talk to dan or antonizoon. Otherwise, you can put a issue on our
-`Github Issue Tracker <https://github.com/bibanon/BASC-py4chan>`_ and we'll respond as
-soon as we can!
+in there and talk to dan or antonizoon. Otherwise, you can put a issue on our `Github
+Issue Tracker <https://github.com/bibanon/BASC-py4chan>`_ and we'll respond as soon as
+we can!
 
 --------
 
-Originally written by `Edgeworth <https://github.com/e000/py-4chan>`_, the
-library has been adopted and extended by `Bibliotheca Anonoma <https://github.com/bibanon>`_.
+Originally written by `Edgeworth <https://github.com/e000/py-4chan>`_, the library
+has been adopted and extended by `Bibliotheca Anonoma <https://github.com/bibanon>`_.
 
 **Note:** If you're a developer that still uses Edgeworth's py-4chan, and don't
 want to change the function names, Bibliotheca Anonoma maintains an `up-to-date,
