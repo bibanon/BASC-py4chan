@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 URL = {
     'api': 'a.4cdn.org',
     'boards': 'boards.4chan.org',
