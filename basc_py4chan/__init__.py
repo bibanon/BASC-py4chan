@@ -15,6 +15,6 @@ the LICENSE file for more details.
 
 __version__ = '0.4.2'
 
-from .board import Board, board, get_boards
+from .board import Board, board, get_boards, get_all_boards
 from .thread import Thread
 from .post import Post

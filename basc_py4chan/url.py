@@ -11,5 +11,6 @@ URL = {
     }
 }
 
+BOARDS = 'https://%s/boards.json' % URL['api']
 CATALOG = 'catalog'
 ALL_THREADS = 'threads'
