@@ -132,7 +132,12 @@ class Thread(object):
         else:
             headers = None
 
-        res = self._board._requests_session.get(self._api_url, headers=headers)
+        # random connection errors, just return 0 and try again later
+        try:
+            res = self._board._requests_session.get(self._api_url, headers=headers)
+        except:
+            # try again later
+            return 0
 
         # 304 Not Modified, no new posts.
         if res.status_code == 304:
