@@ -21,11 +21,24 @@ def _get_board_metadata(board, key):
     return _metadata[board][key]
 
 def get_boards(board_name_list, *args, **kwargs):
+    """Given a list of boards, return :class:`basc_py4chan.Board` objects.
+
+    Args:
+        board_name_list (list): List of board names to get, eg: ['b', 'tg']
+
+    Returns:
+        dict of :class:`basc_py4chan.Board`: Requested boards.
+    """
     if isinstance(board_name_list, basestring):
         board_name_list = board_name_list.split()
     return [Board(name, *args, **kwargs) for name in board_name_list]
 
 def get_all_boards(*args, **kwargs):
+    """Returns every board on 4chan.
+
+    Returns:
+        dict of :class:`basc_py4chan.Board`: All boards.
+    """
     _fetch_boards_metadata()
     return get_boards(_metadata.keys(), *args, **kwargs)
 
@@ -46,6 +59,13 @@ class Board(object):
                 (HTML entities, tags and links) into "cleaned" plaintext.
             api_url: Base 4chan API URL. This will be automatically set in all cases.
             session: Existing requests.session object to use instead of our current one.
+
+        Attributes:
+            name (string): Name of the board, such as "tg" or "etc".
+            title (string): Board title, such as "Animu and Mango".
+            is_worksafe (bool): Whether this board is worksafe.
+            page_count (int): How many pages this board has.
+            threads_per_page (int): How many threads there are on each page.
         """
         self._board_name = board_name
         self._protocol = 'https://' if https else 'http://'
@@ -217,19 +237,18 @@ class Board(object):
         return self._get_metadata('title')
 
     @property
-    def worksafe(self):
-        return self._get_metadata('ws_board') == 1
-    ws = worksafe
+    def is_worksafe(self):
+        if self._get_metadata('ws_board'):
+            return True
+        return False
 
     @property
-    def pages(self):
+    def page_count(self):
         return self._get_metadata('pages')
-    page_count = page_max = pages
 
     @property
     def threads_per_page(self):
         return self._get_metadata('per_page')
-    per_page = threads_per_page
 
     def __repr__(self):
         return '<Board /%s/>' % self.name
