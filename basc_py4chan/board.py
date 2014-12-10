@@ -3,11 +3,12 @@
 import requests
 
 from . import __version__
-from .url import URL, CATALOG, ALL_THREADS
+from .url import URL, BOARDS, CATALOG, ALL_THREADS
 from .thread import Thread
 
 # cached metadata for boards
 _metadata = {}
+
 
 def _fetch_boards_metadata():
     if not _metadata:
@@ -16,9 +17,11 @@ def _fetch_boards_metadata():
         data = {entry['board']: entry for entry in resp.json()['boards']}
         _metadata.update(data)
 
+
 def _get_board_metadata(board, key):
     _fetch_boards_metadata()
     return _metadata[board][key]
+
 
 def get_boards(board_name_list, *args, **kwargs):
     """Given a list of boards, return :class:`basc_py4chan.Board` objects.
@@ -33,6 +36,7 @@ def get_boards(board_name_list, *args, **kwargs):
         board_name_list = board_name_list.split()
     return [Board(name, *args, **kwargs) for name in board_name_list]
 
+
 def get_all_boards(*args, **kwargs):
     """Returns every board on 4chan.
 
@@ -42,21 +46,19 @@ def get_all_boards(*args, **kwargs):
     _fetch_boards_metadata()
     return get_boards(_metadata.keys(), *args, **kwargs)
 
+
 class Board(object):
     """Represents a 4chan board.
 
     Attributes:
         name (str): Name of this board, such as ``tg`` or ``k``
     """
-    def __init__(self, board_name, https=False, clean_comments=True,
-                 api_url=URL['api'], session=None):
+    def __init__(self, board_name, https=False, api_url=URL['api'], session=None):
         """Creates a :mod:`basc_py4chan.Board` object.
 
         Args:
             board_name (string): Name of the board, such as "tg" or "etc".
             https (bool): Whether to use a secure connection to 4chan.
-            clean_comments (bool): Whether post objects will try to parse HTML comments
-                (HTML entities, tags and links) into "cleaned" plaintext.
             api_url: Base 4chan API URL. This will be automatically set in all cases.
             session: Existing requests.session object to use instead of our current one.
 
@@ -69,7 +71,6 @@ class Board(object):
         """
         self._board_name = board_name
         self._protocol = 'https://' if https else 'http://'
-        self._clean_comments = clean_comments
         self._base_url = self._protocol + api_url
 
         self._requests_session = session or requests.session()
@@ -252,5 +253,3 @@ class Board(object):
 
     def __repr__(self):
         return '<Board /%s/>' % self.name
-
-board = Board

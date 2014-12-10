@@ -3,6 +3,7 @@
 from .url import URL
 from .post import Post
 
+
 class Thread(object):
     """Represents a 4chan thread.
 
@@ -12,9 +13,9 @@ class Thread(object):
         topic (:class:`basc_py4chan.Post`): Topic post of the thread, the OP.
         posts (list of :class:`basc_py4chan.Post`): List of all posts in the thread, including the OP.
         all_posts (list of :class:`basc_py4chan.Post`): List of all posts in the thread, including the OP and any omitted posts.
-        thread_url (string): URL of the thread, not including semantic slug.
-        semantic_thread_url (string): URL of the thread, with the semantic slug.
-        url_slug (string): The 'pretty URL slug' assigned to this thread by 4chan.
+        url (string): URL of the thread, not including semantic slug.
+        semantic_url (string): URL of the thread, with the semantic slug.
+        semantic_slug (string): The 'pretty URL slug' assigned to this thread by 4chan.
     """
     def __init__(self, board, id):
         self._board = board
@@ -193,11 +194,7 @@ class Thread(object):
         return self.posts
 
     @property
-    def url_slug(self):
-        return self.topic._semantic_url
-
-    @property
-    def thread_url(self):
+    def url(self):
         board = self._board
         return '%s%s/%s/thread/%i' % (
             board._protocol,
@@ -205,12 +202,14 @@ class Thread(object):
             board.name,
             self.id
         )
-    url = thread_url
 
     @property
-    def semantic_thread_url(self):
-        return '%s/%s' % (self.thread_url, self.slug)
-    semantic_url = semantic_thread_url
+    def semantic_url(self):
+        return '%s/%s' % (self.url, self.semantic_slug)
+
+    @property
+    def semantic_slug(self):
+        return self.topic._semantic_slug
 
     def __repr__(self):
         extra = ''

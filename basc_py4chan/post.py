@@ -5,6 +5,7 @@ from datetime import datetime
 from .url import URL
 from .util import clean_comment_body
 
+
 class Post(object):
     """Represents a 4chan post.
 
@@ -15,8 +16,9 @@ class Post(object):
         email (string): Poster's email.
         tripcode (string): Poster's tripcode.
         subject (string): Subject of this post.
-        orig_comment (string): Original, direct HTML of this comment.
-        comment (string): Comment data, either cleaned or not depending.
+        comment (string): This comment, with the <wbr> tag removed.
+        html_comment (string): Original, direct HTML of this comment.
+        text_comment (string): Plaintext version of this comment.
         is_op (bool): Whether this is the OP (first post of the thread)
         timestamp (int): Unix timestamp for this post.
         datetime (:class:`datetime.datetime`): Datetime time of this post.
@@ -34,13 +36,13 @@ class Post(object):
         thumbnail_fname (string): Filename of the thumbnail attached to this post.
         thumbnail_url (string): URL of the thumbnail attached to this post.
         has_file (bool): Whether this post has a file attached to it.
-        post_url (string): URL of this post.
+        url (string): URL of this post.
         semantic_url (string): URL of this post, with the thread's 'semantic' component.
+        semantic_slug (string): This post's 'semantic slug'.
     """
     def __init__(self, thread, data):
         self._thread = thread
         self._data = data
-        self._clean_comments = thread._board._clean_comments
 
     @property
     def is_op(self):
@@ -73,20 +75,16 @@ class Post(object):
         return self._data.get('sub')
 
     @property
-    def orig_comment(self):
+    def html_comment(self):
         return self._data.get('com', '')
-    html_comment = orig_comment
+
+    @property
+    def text_comment(self):
+        return clean_comment_body(self.html_comment)
 
     @property
     def comment(self):
-        if not self._clean_comments or not self.orig_comment:
-            return self.orig_comment
-
-        if 'cleaned_comment' not in self._data:
-            self._data['cleaned_comment'] = clean_comment_body(self.orig_comment)
-
-        return self._data['cleaned_comment']
-    body = text = comment
+        self.html_comment.replace('<wbr>', '')
 
     @property
     def timestamp(self):
@@ -199,13 +197,16 @@ class Post(object):
         return self._thread._board._requests_session.get(self.thumbnail_url)
 
     @property
-    def semantic_url(self):
-        return self._data.get('semantic_url')
+    def url(self):
+        return '%s#p%i' % (self._thread.url, self.post_number)
 
     @property
-    def post_url(self):
-        return '%s#p%i' % (self._thread.thread_url, self.post_number)
-    url = post_url
+    def semantic_url(self):
+        return '%s#p%i' % (self._thread.semantic_url, self.post_number)
+
+    @property
+    def semantic_slug(self):
+        return self._data.get('semantic_url')
 
     def __repr__(self):
         return '<Post /%s/%i#%i, has_file: %r>' % (

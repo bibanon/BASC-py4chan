@@ -12,6 +12,7 @@ except ImportError:
 
 _parser = HTMLParser()
 
+
 def clean_comment_body(body):
     """Returns given comment HTML as plaintext.
 
