@@ -19,10 +19,6 @@ Here is a sample application that grabs and uses Board information::
 Basic Usage
 -----------
 
-.. automethod:: basc_py4chan.get_boards
-
-.. automethod:: basc_py4chan.get_all_boards
-
 .. autoclass:: basc_py4chan.Board
 
 Methods

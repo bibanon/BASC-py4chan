@@ -38,6 +38,7 @@ API Documentation
 .. toctree::
     :maxdepth: 2
 
+    library/py4chan
     library/board
     library/thread
     library/post
