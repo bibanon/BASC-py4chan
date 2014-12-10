@@ -12,9 +12,9 @@ class Thread(object):
         topic (:class:`basc_py4chan.Post`): Topic post of the thread, the OP.
         posts (list of :class:`basc_py4chan.Post`): List of all posts in the thread, including the OP.
         all_posts (list of :class:`basc_py4chan.Post`): List of all posts in the thread, including the OP and any omitted posts.
-        slug (string): The 'pretty URL slug' assigned to this thread by 4chan.
         thread_url (string): URL of the thread, not including semantic slug.
         semantic_thread_url (string): URL of the thread, with the semantic slug.
+        url_slug (string): The 'pretty URL slug' assigned to this thread by 4chan.
     """
     def __init__(self, board, id):
         self._board = board
@@ -48,10 +48,9 @@ class Thread(object):
         if res.status_code == 404:
             return None
 
-        if res.status_code == 200:
-            return cls._from_json(res.json(), board, id, res.headers['Last-Modified'])
-        else:
-            res.raise_for_status()
+        res.raise_for_status()
+
+        return cls._from_json(res.json(), board, id, res.headers['Last-Modified'])
 
     @classmethod
     def _from_json(cls, json, board, id=None, last_modified=None):
@@ -64,6 +63,12 @@ class Thread(object):
         t.topic = t.op = Post(t, head)
         t.replies.extend(Post(t, p) for p in rest)
 
+        t.id = head['no']
+        t.num_replies = head['replies']
+        t.num_images = head['images']
+        t.omitted_images = head.get('omitted_images', 0)
+        t.omitted_posts = head.get('omitted_posts', 0)
+
         if id is not None:
             if not t.replies:
                 t.last_reply_id = t.topic.post_number
@@ -72,11 +77,6 @@ class Thread(object):
 
         else:
             t.want_update = True
-            t.id = head['no']
-            t.num_replies = head['replies']
-            t.num_images = head['images']
-            t.omitted_images = head.get('omitted_images', 0)
-            t.omitted_posts = head.get('omitted_posts', 0)
 
         return t
 
@@ -144,7 +144,6 @@ class Thread(object):
             self._board._thread_cache.pop(self.id, None)
             return 0
 
-
         elif res.status_code == 200:
             # If we somehow 404'ed, we should put ourself back in the cache.
             if self.is_404:
@@ -194,7 +193,7 @@ class Thread(object):
         return self.posts
 
     @property
-    def slug(self):
+    def url_slug(self):
         return self.topic._semantic_url
 
     @property
