@@ -1,7 +1,7 @@
 :mod:`basc_py4chan` – 4chan Python Library
 ==========================================
 
-:class:`basc_py4chan.Board` provides access to a 4chan board including checking if threads exist, retrieving appropriate :class:`basc_py4chan.Thread` objects, and returning lists of all the threads that exist on the given board.
+:mod:`basc_py4chan` gives access to 4chan from a clean Python interface.
 
 
 Basic Usage
