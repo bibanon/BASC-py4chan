@@ -9,14 +9,15 @@ class Post(object):
     """Represents a 4chan post.
 
     Attributes:
-        post_number (int): Number of this post relative to the thread. Eg: ``4``, ``6``, ``7``, ``8``.
-        id (int): Post ID.
+        post_id (int): ID of this post. Eg: ``123123123``, ``456456456``.
+        poster_id (int): Poster ID.
         name (string): Poster's name.
         email (string): Poster's email.
         tripcode (string): Poster's tripcode.
         subject (string): Subject of this post.
         orig_comment (string): Original, direct HTML of this comment.
         comment (string): Comment data, either cleaned or not depending.
+        is_op (bool): Whether this is the OP (first post of the thread)
         timestamp (int): Unix timestamp for this post.
         datetime (:class:`datetime.datetime`): Datetime time of this post.
         file_md5 (string): MD5 hash of the file attached to this post.
@@ -34,6 +35,7 @@ class Post(object):
         thumbnail_url (string): URL of the thumbnail attached to this post.
         has_file (bool): Whether this post has a file attached to it.
         post_url (string): URL of this post.
+        semantic_url (string): URL of this post, with the thread's 'semantic' component.
     """
     def __init__(self, thread, data):
         self._thread = thread
@@ -41,12 +43,17 @@ class Post(object):
         self._clean_comments = thread._board._clean_comments
 
     @property
-    def post_number(self):
+    def is_op(self):
+        return self == self.thread.topic
+    is_OP = is_op
+
+    @property
+    def post_id(self):
         return self._data.get('no')
     number = num = no = post_number
 
     @property
-    def id(self):
+    def poster_id(self):
         return self._data.get('id')
 
     @property
@@ -192,7 +199,7 @@ class Post(object):
         return self._thread._board._requests_session.get(self.thumbnail_url)
 
     @property
-    def _semantic_url(self):
+    def semantic_url(self):
         return self._data.get('semantic_url')
 
     @property

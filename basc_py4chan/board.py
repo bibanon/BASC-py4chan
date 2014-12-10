@@ -49,24 +49,31 @@ class Board(object):
         res.raise_for_status()
         return res.json()
 
-    def get_thread(self, thread_id, update_if_cached=True):
+    def get_thread(self, thread_id, update_if_cached=True, raise_404=False):
         """Get a thread from 4chan via 4chan API.
 
         Args:
             thread_id (int): Thread ID
             update_if_cached (bool): Whether the thread should be updated if it's already in our cache
+            raise_404 (bool): Raise an Exception if thread has 404'd
 
         Returns:
             :class:`basc_py4chan.Thread`: Thread object
         """
-        if thread_id in self._thread_cache:
-            thread = self._thread_cache[thread_id]
+        # see if already cached
+        cached_thread = self._thread_cache.get(thread_id)
+        if cached_thread:
             if update_if_cached:
-                thread.update()
-
-            return thread
+                cached_thread.update()
+            return cached_thread
 
         res = self._requests_session.get(self._thread_path % thread_id)
+
+        # check if thread exists
+        if raise_404:
+            res.raise_for_status()
+        elif not res.ok:
+            return None
 
         thread = Thread._from_request(self, res, thread_id)
         self._thread_cache[thread_id] = thread
@@ -164,7 +171,7 @@ class Board(object):
             return self._request_threads(CATALOG)
 
         thread_ids = self.get_all_thread_ids()
-        threads = [self.get_thread(id) for id in thread_ids]
+        threads = [self.get_thread(id, raise_404=False) for id in thread_ids]
 
         return filter(None, threads)
 
