@@ -51,7 +51,12 @@ class Board(object):
     """Represents a 4chan board.
 
     Attributes:
-        name (str): Name of this board, such as ``tg`` or ``k``
+        name (str): Name of this board, such as ``tg`` or ``k``.
+        name (string): Name of the board, such as "tg" or "etc".
+        title (string): Board title, such as "Animu and Mango".
+        is_worksafe (bool): Whether this board is worksafe.
+        page_count (int): How many pages this board has.
+        threads_per_page (int): How many threads there are on each page.
     """
     def __init__(self, board_name, https=False, api_url=URL['api'], session=None):
         """Creates a :mod:`basc_py4chan.Board` object.
@@ -61,13 +66,6 @@ class Board(object):
             https (bool): Whether to use a secure connection to 4chan.
             api_url: Base 4chan API URL. This will be automatically set in all cases.
             session: Existing requests.session object to use instead of our current one.
-
-        Attributes:
-            name (string): Name of the board, such as "tg" or "etc".
-            title (string): Board title, such as "Animu and Mango".
-            is_worksafe (bool): Whether this board is worksafe.
-            page_count (int): How many pages this board has.
-            threads_per_page (int): How many threads there are on each page.
         """
         self._board_name = board_name
         self._protocol = 'https://' if https else 'http://'
