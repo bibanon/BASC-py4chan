@@ -50,7 +50,7 @@ class Post(object):
     @property
     def post_id(self):
         return self._data.get('no')
-    number = num = no = post_number
+    number = num = no = post_number = post_id
 
     @property
     def poster_id(self):
