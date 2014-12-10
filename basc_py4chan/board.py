@@ -6,10 +6,28 @@ from . import __version__
 from .url import URL, CATALOG, ALL_THREADS
 from .thread import Thread
 
+# cached metadata for boards
+_metadata = {}
+
+def _fetch_boards_metadata():
+    if not _metadata:
+        resp = requests.get(BOARDS)
+        resp.raise_for_status()
+        data = {entry['board']: entry for entry in resp.json()['boards']}
+        _metadata.update(data)
+
+def _get_board_metadata(board, key):
+    _fetch_boards_metadata()
+    return _metadata[board][key]
+
 def get_boards(board_name_list, *args, **kwargs):
     if isinstance(board_name_list, basestring):
         board_name_list = board_name_list.split()
     return [Board(name, *args, **kwargs) for name in board_name_list]
+
+def get_all_boards(*args, **kwargs):
+    _fetch_boards_metadata()
+    return get_boards(_metadata.keys(), *args, **kwargs)
 
 class Board(object):
     """Represents a 4chan board.
@@ -43,6 +61,9 @@ class Board(object):
                                        URL['template']['thread'].format(name=board_name))
 
         self._thread_cache = {}
+
+    def _get_metadata(self, key):
+        return _get_board_metadata(self._board_name, key)
 
     def _get_json(self, path):
         res = self._requests_session.get(self._board_path % path)
@@ -190,6 +211,25 @@ class Board(object):
     @property
     def name(self):
         return self._board_name
+
+    @property
+    def title(self):
+        return self._get_metadata('title')
+
+    @property
+    def worksafe(self):
+        return self._get_metadata('ws_board') == 1
+    ws = worksafe
+
+    @property
+    def pages(self):
+        return self._get_metadata('pages')
+    page_count = page_max = pages
+
+    @property
+    def threads_per_page(self):
+        return self._get_metadata('per_page')
+    per_page = threads_per_page
 
     def __repr__(self):
         return '<Board /%s/>' % self.name
