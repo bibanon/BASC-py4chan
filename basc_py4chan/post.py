@@ -84,7 +84,7 @@ class Post(object):
 
     @property
     def comment(self):
-        self.html_comment.replace('<wbr>', '')
+        return self.html_comment.replace('<wbr>', '')
 
     @property
     def timestamp(self):
