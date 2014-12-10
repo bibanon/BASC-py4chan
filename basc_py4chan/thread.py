@@ -209,7 +209,7 @@ class Thread(object):
 
     @property
     def semantic_slug(self):
-        return self.topic._semantic_slug
+        return self.topic.semantic_slug
 
     def __repr__(self):
         extra = ''
