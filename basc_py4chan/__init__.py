@@ -14,6 +14,6 @@ information quickly and easily.
 
 __version__ = '0.4.2'
 
-from .board import Board, board, get_boards, get_all_boards
+from .board import Board, get_boards, get_all_boards
 from .thread import Thread
 from .post import Post
