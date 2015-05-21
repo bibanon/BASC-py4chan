@@ -3,16 +3,30 @@
 import requests
 
 from . import __version__
-from .url import URL, BOARDS, CATALOG, ALL_THREADS
+from .url import URL
 from .thread import Thread
 
 # cached metadata for boards
 _metadata = {}
 
 
-def _fetch_boards_metadata():
+def _fetch_boards_metadata(boards_list=URL['boards_list']):
+    """Used by get_boards() to retrieve a list of boards and 
+    their metadata via the 4chan API.
+    
+    If you are making a derived class (for 420chan or 8chan)
+    you MUST inherit and override this method with:
+        def _fetch_boards_metadata(boards_list="http://new-api-url/boards.json"):
+            super(boards_list)
+
+    Args:
+        boards_list (string): API URL to obtain the boards
+        list from. For 4chan, it is something like
+        'https://a.4cdn.org/boards.json'
+    """
+    
     if not _metadata:
-        resp = requests.get(BOARDS)
+        resp = requests.get(boards_list)
         resp.raise_for_status()
         data = {entry['board']: entry for entry in resp.json()['boards']}
         _metadata.update(data)
@@ -58,26 +72,26 @@ class Board(object):
         page_count (int): How many pages this board has.
         threads_per_page (int): How many threads there are on each page.
     """
-    def __init__(self, board_name, https=False, api_url=URL['api'], session=None):
+    def __init__(self, board_name, https=False, site_urls=URL, session=None):
         """Creates a :mod:`basc_py4chan.Board` object.
 
         Args:
             board_name (string): Name of the board, such as "tg" or "etc".
             https (bool): Whether to use a secure connection to 4chan.
-            api_url: Base 4chan API URL. This will be automatically set in all cases.
+            site_urls: A Python dictionary defining which API URLs to access. See url.py for example contents. By default, it is set to the 4chan API using the 'url.py' file. However, the user (or better yet, derived classes) can choose to use another compatible API, such as 8chan/vichan or 420chan.
             session: Existing requests.session object to use instead of our current one.
         """
         self._board_name = board_name
         self._protocol = 'https://' if https else 'http://'
-        self._base_url = self._protocol + api_url
+        self._base_url = self._protocol + site_urls['api']
 
         self._requests_session = session or requests.session()
         self._requests_session.headers['User-Agent'] = 'py-4chan/%s' % __version__
 
         self._board_path = '%s/%s' % (self._base_url,
-                                      URL['template']['board'].format(name=board_name))
+                                      site_urls['template']['board'].format(name=board_name))
         self._thread_path = '%s/%s' % (self._base_url,
-                                       URL['template']['thread'].format(name=board_name))
+                                       site_urls['template']['thread'].format(name=board_name))
 
         self._thread_cache = {}
 
@@ -144,7 +158,7 @@ class Board(object):
     def _request_threads(self, page):
         json = self._get_json(page)
 
-        if page == CATALOG:
+        if page == site_urls['catalog_dir']:
             thread_list = self._catalog_to_threads(json)
         else:
             thread_list = json['threads']
@@ -186,7 +200,7 @@ class Board(object):
         Returns:
             list of ints: List of IDs of every thread on this board.
         """
-        json = self._get_json(ALL_THREADS)
+        json = self._get_json(site_urls['all_threads'])
         return [thread['no'] for page in json for thread in page['threads']]
 
     def get_all_threads(self, expand=False):
@@ -208,7 +222,7 @@ class Board(object):
             list of :mod:`basc_py4chan.Thread`: List of Thread objects representing every thread on this board.
         """
         if not expand:
-            return self._request_threads(CATALOG)
+            return self._request_threads(site_urls['catalog_dir'])
 
         thread_ids = self.get_all_thread_ids()
         threads = [self.get_thread(id, raise_404=False) for id in thread_ids]
@@ -248,6 +262,14 @@ class Board(object):
     @property
     def threads_per_page(self):
         return self._get_metadata('per_page')
+
+    @property
+    def _site_urls(self):
+        """ Returns a Python dictionary defining which API URLs to access.
+        
+        Meant to be used internally by thread.py and post.py, ensuring that they obtain the URL to use from boards.py.
+        """
+        return self.site_urls
 
     def __repr__(self):
         return '<Board /%s/>' % self.name

@@ -43,15 +43,64 @@ Usage
     b = basc_py4chan.Board('b')
     thread = b.get_thread(423491034)
 
-    print thread
+    print(thread)
 
     for file in thread.files():
-        print file
+        print(file)
         
     # In a while...
-    print "I fetched", thread.update(), "new replies."
+    print("I fetched", thread.update(), "new replies.")
 
 Documentation is located `here <http://basc-py4chan.readthedocs.org/en/latest/index.html>`_.
+
+Extending this Library
+----------------------
+
+There are a wealth of other imageboard APIs that have adopted a similar structure to the 4chan API (such as 8chan/vichan, or 420chan).
+
+So instead of writing a whole new class from scratch, you could inherit and override BASC-py4chan to support them. Here's how:
+
+.. code:: python
+    import basc_py4chan
+    
+    # new site's API URL structure
+    URL = {
+        'api': 'a.4cdn.org',          # API subdomain
+        'boards': 'boards.4chan.org', # HTML subdomain
+        'images': 'i.4cdn.org',       # image host
+        'thumbs': 't.4cdn.org',       # thumbs host
+        'template': {
+            'board': '{name}/%s.json',
+            'thread': '{name}/thread/%s.json'
+        },
+         'all_threads': 'threads',             # json entry for threads
+         'catalog_dir': 'catalog',             # catalog directory 
+         'boards_list': 'https://a.4cdn.org/boards.json' # list of all boards
+    }
+    
+    class Board(basc_py4chan.Board):
+        # override the `boards_list` variable with URL struct
+        def _fetch_boards_metadata(boards_list=URL['boards_list']):
+            super(boards_list)
+
+        # redeclare to use our URL structs
+        def __init__(self, board_name, https=False, site_urls=URL, session=None):
+           super(board_name, https=False, site_urls=URL, session=None)
+           
+    class Thread(basc_py4chan.Threads):
+        # add your own overrides here, or leave it alone
+        pass
+
+    class Post(basc_py4chan.Post):
+        # add your own overrides here, or leave it alone
+        pass
+        
+    # note that all classes must be in one file (we recommend py?chan/__init__.py), due to limitations of python's module extend system
+
+
+From there, just override any methods in classes Board, Thread or Post as necessary. 
+
+Notice that if your imageboard's API does not support a certain feature in the 4chan API, you should have the function return NULL.
 
 License
 -------
