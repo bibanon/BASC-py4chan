@@ -3,7 +3,8 @@
 
 # 4chan URL generator. Inherit and override this for derivative classes  (e.g. 420chan API, 8chan/vichan API)
 class Url():
-    def __init__(self, board='*', https=False):
+    # default value for board in case user wants to query board list
+    def __init__(self, board, https=False):
         self._board = board
         self._protocol = 'https://' if https else 'http://'
         
@@ -47,6 +48,8 @@ class Url():
         self.URL.update({'listing': LISTING})
 
     # generate boards listing URL
+    # static so you can use anytime without instantiating
+    @staticmethod
     def board_list(self):
         return self.URL['listing']['board_list']
 
@@ -69,11 +72,11 @@ class Url():
             board=self._board
             )
 
-    # generate archived threads listing URL
-    def archived_thread_list(self):
-        return self.URL['listing']['archived_thread_list'].format(
-            board=self._board
-            )
+#    # generate archived threads list URL (disabled for compatibility)
+#    def archived_thread_list(self):
+#        return self.URL['listing']['archived_thread_list'].format(
+#            board=self._board
+#            )
 
     # generate API thread URL
     def thread_api_url(self, thread_id):
