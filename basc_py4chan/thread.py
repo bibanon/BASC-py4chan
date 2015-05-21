@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from .url import URL
 from .post import Post
 
 
@@ -203,7 +202,7 @@ class Thread(object):
         board = self._board
         return '%s%s/%s/thread/%i' % (
             board._protocol,
-            URL['boards'],
+            board.site_urls['boards'],
             board.name,
             self.id
         )
