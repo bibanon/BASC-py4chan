@@ -28,9 +28,8 @@ else:
 
 
 def _fetch_boards_metadata():
-    _url = Url()      # quick and dirty 4chan URL generator
     if not _metadata:
-        resp = requests.get(_url.board_list())
+        resp = requests.get(Url.board_list())
         resp.raise_for_status()
         data = {entry['board']: entry for entry in resp.json()['boards']}
         _metadata.update(data)
