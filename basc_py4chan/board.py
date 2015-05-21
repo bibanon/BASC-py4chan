@@ -9,6 +9,23 @@ from .url import Url
 # cached metadata for boards
 _metadata = {}
 
+# compatibility layer for Python2's `basestring` variable
+# http://www.rfk.id.au/blog/entry/preparing-pyenchant-for-python-3/
+try:
+    unicode = unicode
+except NameError:
+    # 'unicode' is undefined, must be Python 3
+    str = str
+    unicode = str
+    bytes = bytes
+    basestring = (str,bytes)
+else:
+    # 'unicode' exists, must be Python 2
+    str = str
+    unicode = unicode
+    bytes = str
+    basestring = basestring
+
 
 def _fetch_boards_metadata():
     _url = Url()      # quick and dirty 4chan URL generator
