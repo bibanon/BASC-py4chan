@@ -205,7 +205,7 @@ class Thread(object):
 
     @property
     def url(self):
-        return _url.thread_url(self.id)
+        return self._url.thread_url(self.id)
 
     @property
     def semantic_url(self):

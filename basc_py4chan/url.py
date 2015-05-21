@@ -107,7 +107,7 @@ class Url():
     # return entire URL dictionary
     @property
     def site_urls(self):
-        return self._site_urls
+        return self.URL
 
 """
 # 4chan Static Data (Unique to 4chan, needs implementation)
