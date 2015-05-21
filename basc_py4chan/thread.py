@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from .post import Post
+from .url import Url
 
 
 class Thread(object):
@@ -18,6 +19,7 @@ class Thread(object):
     """
     def __init__(self, board, id):
         self._board = board
+        self._url = Url(board=board.name, https=board.https)       # 4chan URL generator
         self.id = self.number = self.num = self.no = id
         self.topic = None
         self.replies = []
@@ -33,7 +35,7 @@ class Thread(object):
 
     @property
     def _api_url(self):
-        return self._board._thread_path % self.id
+        return self._url.thread_api_url(self.id)
 
     @property
     def closed(self):
@@ -198,14 +200,12 @@ class Thread(object):
         return self.posts
 
     @property
+    def https(self):
+        return self._board._https
+
+    @property
     def url(self):
-        board = self._board
-        return '%s%s/%s/thread/%i' % (
-            board._protocol,
-            board.site_urls['boards'],
-            board.name,
-            self.id
-        )
+        return _url.thread_url(self.id)
 
     @property
     def semantic_url(self):
