@@ -93,6 +93,8 @@ class Board(object):
         self._thread_path = '%s/%s' % (self._base_url,
                                        site_urls['template']['thread'].format(name=board_name))
 
+        self._site_urls = site_urls
+
         self._thread_cache = {}
 
     def _get_metadata(self, key):
@@ -264,12 +266,12 @@ class Board(object):
         return self._get_metadata('per_page')
 
     @property
-    def _site_urls(self):
+    def site_urls(self):
         """ Returns a Python dictionary defining which API URLs to access.
         
         Meant to be used internally by thread.py and post.py, ensuring that they obtain the URL to use from boards.py.
         """
-        return self.site_urls
+        return self._site_urls
 
     def __repr__(self):
         return '<Board /%s/>' % self.name

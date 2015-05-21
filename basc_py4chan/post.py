@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 
-from .url import URL
 from .util import clean_comment_body
 
 
@@ -128,7 +127,7 @@ class Post(object):
         board = self._thread._board
         return '%s%s/%s/%i%s' % (
             board._protocol,
-            URL['images'],
+            board.site_urls['images'],
             board.name,
             self._data['tim'],
             self._data['ext']
@@ -181,7 +180,7 @@ class Post(object):
         board = self._thread._board
         return '%s%s/%s/%is.jpg' % (
             board._protocol,
-            URL['thumbs'],
+            board.site_urls['thumbs'],
             board.name,
             self._data['tim']
         )
