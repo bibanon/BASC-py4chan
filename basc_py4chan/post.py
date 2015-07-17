@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 
+from .url import Url
 from .util import clean_comment_body
 
 
@@ -42,6 +43,7 @@ class Post(object):
     def __init__(self, thread, data):
         self._thread = thread
         self._data = data
+        self._url = Url(board=self._thread._board.name, https=thread.https)		# 4chan URL generator
 
     @property
     def is_op(self):
@@ -125,10 +127,7 @@ class Post(object):
             return None
 
         board = self._thread._board
-        return '%s%s/%s/%i%s' % (
-            board._protocol,
-            board.site_urls['images'],
-            board.name,
+        return self._url.file_url(
             self._data['tim'],
             self._data['ext']
         )
@@ -178,10 +177,7 @@ class Post(object):
             return None
 
         board = self._thread._board
-        return '%s%s/%s/%is.jpg' % (
-            board._protocol,
-            board.site_urls['thumbs'],
-            board.name,
+        return self._url.thumb_url(
             self._data['tim']
         )
 
