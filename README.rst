@@ -63,29 +63,27 @@ So instead of writing a whole new class from scratch, you could inherit and over
 .. code:: python
     import basc_py4chan
     
-    # new site's API URL structure
-    URL = {
-        'api': 'a.4cdn.org',          # API subdomain
-        'boards': 'boards.4chan.org', # HTML subdomain
-        'images': 'i.4cdn.org',       # image host
-        'thumbs': 't.4cdn.org',       # thumbs host
-        'template': {
-            'board': '{name}/%s.json',
-            'thread': '{name}/thread/%s.json'
-        },
-         'all_threads': 'threads',             # json entry for threads
-         'catalog_dir': 'catalog',             # catalog directory 
-         'boards_list': 'https://a.4cdn.org/boards.json' # list of all boards
-    }
+    class URL (basc_py4chan.URL):
+        # see BASC-py4chan's `url.py` for an example of how to set up
+        # the URLs.
+        def __init__(self, https=False):
+            # Your API URL Subdomains
+            DOMAIN = { }
+            
+            # Your API URL Templates
+            TEMPLATE = { }
+            
+            # Your API Listings
+            LISTING = { }
+            
+            # combine all dictionaries into self.URL dictionary
+            self.URL = TEMPLATE
+            self.URL.update({'domain': DOMAIN})
+            self.URL.update({'listing': LISTING})
     
     class Board(basc_py4chan.Board):
-        # override the `boards_list` variable with URL struct
-        def _fetch_boards_metadata(boards_list=URL['boards_list']):
-            super(boards_list)
-
-        # redeclare to use our URL structs
-        def __init__(self, board_name, https=False, site_urls=URL, session=None):
-           super(board_name, https=False, site_urls=URL, session=None)
+        # add your own overrides here, or leave it alone
+        pass
            
     class Thread(basc_py4chan.Threads):
         # add your own overrides here, or leave it alone
@@ -100,7 +98,7 @@ So instead of writing a whole new class from scratch, you could inherit and over
 
 From there, just override any methods in classes Board, Thread or Post as necessary. 
 
-Notice that if your imageboard's API does not support a certain feature in the 4chan API, you should have the function return NULL.
+Notice that if your imageboard's API does not support a certain feature in the 4chan API, `you should have the function raise an AttributeError. <http://stackoverflow.com/a/23126260>`_
 
 License
 -------
