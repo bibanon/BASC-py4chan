@@ -237,7 +237,7 @@ class Board(object):
 
     def refresh_cache(self, if_want_update=False):
         """Update all threads currently stored in our cache."""
-        for thread in self._thread_cache.values():
+        for thread in tuple(self._thread_cache.values()):
             if if_want_update:
                 if not thread.want_update:
                     continue
