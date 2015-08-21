@@ -107,3 +107,7 @@ target/
 
 #Mr Developer
 .mr.developer.cfg
+
+
+# BASC-Archiver
+/archive*

@@ -5,6 +5,7 @@ sys.path.insert(0, '../')
 
 import py4chan
 
+
 def main():
     v = py4chan.Board('v')
     thread = v.get_thread(152900882)
@@ -20,7 +21,7 @@ def main():
     print('Fileurl',    topic.file_url)
     print('Subject',    topic.subject)
     print('Comment',    topic.comment)
-    print('Thumbnailurl',topic.thumbnail_url)
+    print('Thumbnailurl', topic.thumbnail_url)
     print('Replies',    thread.replies)
     print('All posts',  thread.all_posts)
 

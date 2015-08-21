@@ -94,7 +94,8 @@ So instead of writing a whole new class from scratch, you could inherit and over
         # add your own overrides here, or leave it alone
         pass
 
-    # note that all classes must be in one file (we recommend py?chan/__init__.py), due to limitations of python's module extend system
+    # note that all classes must be in one file (we recommend
+    #   py?chan/__init__.py ), due to how python modules work
 
 
 From there, just override any methods in classes Board, Thread or Post as necessary. 

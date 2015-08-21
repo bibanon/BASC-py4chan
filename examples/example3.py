@@ -1,6 +1,5 @@
 # credits to Anarov for improved example.py
 # https://github.com/Anorov/py-4chan
-
 import sys
 sys.path.insert(0, '../')
 

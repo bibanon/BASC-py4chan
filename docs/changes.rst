@@ -1,8 +1,8 @@
 Changes from the original py4chan
 =================================
 
-Since Edgeworth has gone MIA, the BASC has adopted the project and made
-the following improvements.
+Since Edgeworth has gone MIA, `BASC <http://bibanon.org/>`_ has adopted the
+project and made the following improvements.
 
 Changes by `antonizoon <https://github.com/antonizoon>`_
 --------------------------------------------------------
