@@ -203,7 +203,8 @@ class Board(object):
         Returns:
             list of :mod:`basc_py4chan.Thread`: List of Thread objects representing the threads on the given page.
         """
-        return self._request_threads(page)
+        url = self._url.page_url(page)
+        return self._request_threads(url)
 
     def get_all_thread_ids(self):
         """Return the ID of every thread on this board.
