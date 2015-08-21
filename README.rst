@@ -61,6 +61,7 @@ There are a wealth of other imageboard APIs that have adopted a similar structur
 So instead of writing a whole new class from scratch, you could inherit and override BASC-py4chan to support them. Here's how:
 
 .. code:: python
+
     import basc_py4chan
     
     class URL (basc_py4chan.URL):
@@ -92,7 +93,7 @@ So instead of writing a whole new class from scratch, you could inherit and over
     class Post(basc_py4chan.Post):
         # add your own overrides here, or leave it alone
         pass
-        
+
     # note that all classes must be in one file (we recommend py?chan/__init__.py), due to limitations of python's module extend system
 
 
