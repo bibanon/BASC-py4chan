@@ -1,13 +1,9 @@
 # credits to Anarov for improved example.py
-# https://github.com/Anorov/py-4chan
-import sys
-sys.path.insert(0, '../')
-
-import py4chan
+import basc_py4chan
 
 
 def main():
-    v = py4chan.Board('v')
+    v = basc_py4chan.Board('v')
     thread = v.get_thread(152900882)
     print(thread)
     print('Sticky?', thread.sticky)
