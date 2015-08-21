@@ -28,10 +28,11 @@ else:
 
 
 def _fetch_boards_metadata(url_generator):
-    resp = requests.get(url_generator.board_list())
-    resp.raise_for_status()
-    data = {entry['board']: entry for entry in resp.json()['boards']}
-    _metadata.update(data)
+    if not _metadata:
+        resp = requests.get(url_generator.board_list())
+        resp.raise_for_status()
+        data = {entry['board']: entry for entry in resp.json()['boards']}
+        _metadata.update(data)
 
 
 def _get_board_metadata(url_generator, board, key):
