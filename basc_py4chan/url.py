@@ -48,8 +48,6 @@ class Url():
         self.URL.update({'listing': LISTING})
 
     # generate boards listing URL
-    # static so you can use anytime without instantiating
-    @staticmethod
     def board_list(self):
         return self.URL['listing']['board_list']
 

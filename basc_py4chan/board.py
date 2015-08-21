@@ -18,7 +18,7 @@ except NameError:
     str = str
     unicode = str
     bytes = bytes
-    basestring = (str,bytes)
+    basestring = str, bytes
 else:
     # 'unicode' exists, must be Python 2
     str = str
@@ -27,16 +27,15 @@ else:
     basestring = basestring
 
 
-def _fetch_boards_metadata():
-    if not _metadata:
-        resp = requests.get(Url.board_list())
-        resp.raise_for_status()
-        data = {entry['board']: entry for entry in resp.json()['boards']}
-        _metadata.update(data)
+def _fetch_boards_metadata(url_generator):
+    resp = requests.get(url_generator.board_list())
+    resp.raise_for_status()
+    data = {entry['board']: entry for entry in resp.json()['boards']}
+    _metadata.update(data)
 
 
-def _get_board_metadata(board, key):
-    _fetch_boards_metadata()
+def _get_board_metadata(url_generator, board, key):
+    _fetch_boards_metadata(url_generator)
     return _metadata[board][key]
 
 
@@ -60,7 +59,13 @@ def get_all_boards(*args, **kwargs):
     Returns:
         dict of :class:`basc_py4chan.Board`: All boards.
     """
-    _fetch_boards_metadata()
+    # Use https based on how the Board class instances are to be instantiated
+    https = kwargs.get('https', args[1] if len(args) > 1 else False)
+
+    # Dummy URL generator, only used to generate the board list which doesn't
+    # require a valid board name
+    url_generator = Url(None, https)
+    _fetch_boards_metadata(url_generator)
     return get_boards(_metadata.keys(), *args, **kwargs)
 
 
@@ -94,7 +99,7 @@ class Board(object):
         self._thread_cache = {}
 
     def _get_metadata(self, key):
-        return _get_board_metadata(self._board_name, key)
+        return _get_board_metadata(self._url, self._board_name, key)
 
     def _get_json(self, url):
         res = self._requests_session.get(url)
