@@ -16,10 +16,12 @@ the LICENSE file for more details.
 from setuptools import setup
 from basc_py4chan import __version__
 
-setup(name='BASC-py4chan',
+setup(
+    name='BASC-py4chan',
     version=__version__,
-    description="Python 4chan API Wrapper. Improved version of Edgeworth's original py-4chan wrapper.",
-    long_description = open('README.rst').read(),
+    description=("Python 4chan API Wrapper. Improved version of Edgeworth's "
+                 "original py-4chan wrapper."),
+    long_description=open('README.rst').read(),
     license=open('LICENSE').read(),
     author='Antonizoon (Antonizoon Overtwater)',
     author_email='antonizoon@bibanon.org',
@@ -29,5 +31,12 @@ setup(name='BASC-py4chan',
         'basc_py4chan': 'basc_py4chan',
     },
     package_data={'': ['README.rst', 'LICENSE']},
-    install_requires=['requests >= 1.0.0']
+    install_requires=['requests >= 1.0.0'],
+    keywords='4chan api',
+    classifiers=[
+        'Intended Audience :: Developers',
+        'Natural Language :: English',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 3',
+    ]
 )

@@ -1,9 +1,5 @@
 # credits to Anarov for improved example.py
-# https://github.com/Anorov/py-4chan
-import sys
-sys.path.insert(0, '../')
-
-import py4chan
+import basc_py4chan
 
 
 def main():
@@ -14,10 +10,10 @@ def main():
               % sys.argv[0])
         return
 
-    board = py4chan.Board(sys.argv[1])
+    board = basc_py4chan.Board(sys.argv[1])
     thread = board.get_thread(int(sys.argv[2]))
-    for file in thread.files():
-        print(file)
+    for f in thread.files():
+        print(f)
 
 if __name__ == '__main__':
     main()
