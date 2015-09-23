@@ -65,7 +65,7 @@ class Thread(object):
         t.topic = t.op = Post(t, head)
         t.replies.extend(Post(t, p) for p in rest)
 
-        t.id = head['no']
+        t.id = head.get('no', id)
         t.num_replies = head['replies']
         t.num_images = head['images']
         t.omitted_images = head.get('omitted_images', 0)
