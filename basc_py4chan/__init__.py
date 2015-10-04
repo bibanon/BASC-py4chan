@@ -12,7 +12,7 @@ and an object-oriented way to browse and get board and thread
 information quickly and easily.
 """
 
-__version__ = '0.5.4'
+__version__ = '0.5.5'
 
 from .board import Board, board, get_boards, get_all_boards
 from .thread import Thread
