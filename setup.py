@@ -14,11 +14,10 @@ the LICENSE file for more details.
 """
 
 from setuptools import setup
-from basc_py4chan import __version__
 
 setup(
     name='BASC-py4chan',
-    version=__version__,
+    version='0.5.5',
     description=("Python 4chan API Wrapper. Improved version of Edgeworth's "
                  "original py-4chan wrapper."),
     long_description=open('README.rst').read(),
