@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # 4chan URL generator. Inherit and override this for derivative classes  (e.g. 420chan API, 8chan/vichan API)
-class Url():
+class Url(object):
     # default value for board in case user wants to query board list
     def __init__(self, board, https=False):
         self._board = board

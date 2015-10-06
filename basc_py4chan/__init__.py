@@ -17,3 +17,4 @@ __version__ = '0.5.5'
 from .board import Board, board, get_boards, get_all_boards
 from .thread import Thread
 from .post import Post
+from .url import Url
