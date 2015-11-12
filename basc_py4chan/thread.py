@@ -85,34 +85,42 @@ class Thread(object):
     def files(self):
         """Returns the URLs of all files attached to posts in the thread."""
         if self.topic.has_file:
-            yield self.topic.file_url
+            yield self.topic.file.file_url
         for reply in self.replies:
             if reply.has_file:
-                yield reply.file_url
+                yield reply.file.file_url
 
     def thumbs(self):
         """Returns the URLs of all thumbnails in the thread."""
         if self.topic.has_file:
-            yield self.topic.thumbnail_url
+            yield self.topic.file.thumbnail_url
         for reply in self.replies:
             if reply.has_file:
-                yield reply.thumbnail_url
+                yield reply.file.thumbnail_url
 
     def filenames(self):
         """Returns the filenames of all files attached to posts in the thread."""
         if self.topic.has_file:
-            yield self.topic.filename
+            yield self.topic.file.filename
         for reply in self.replies:
             if reply.has_file:
-                yield reply.filename
+                yield reply.file.filename
 
     def thumbnames(self):
         """Returns the filenames of all thumbnails in the thread."""
         if self.topic.has_file:
-            yield self.topic.thumbnail_fname
+            yield self.topic.file.thumbnail_fname
         for reply in self.replies:
             if reply.has_file:
-                yield reply.thumbnail_fname
+                yield reply.file.thumbnail_fname
+
+    def file_objects(self):
+        """Returns the :class:`basc_py4chan.File` objects of all files attached to posts in the thread."""
+        if self.topic.has_file:
+            yield self.topic.file
+        for reply in self.replies:
+            if reply.has_file:
+                yield reply.file
 
     def update(self, force=False):
         """Fetch new posts from the server.
