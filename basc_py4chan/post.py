@@ -3,8 +3,8 @@
 from datetime import datetime
 
 from .url import Url
+from .file import File
 from .util import clean_comment_body
-
 
 class Post(object):
     """Represents a 4chan post.
@@ -22,19 +22,7 @@ class Post(object):
         is_op (bool): Whether this is the OP (first post of the thread)
         timestamp (int): Unix timestamp for this post.
         datetime (:class:`datetime.datetime`): Datetime time of this post.
-        file_md5 (string): MD5 hash of the file attached to this post.
-        file_md5_hex (string): Hex-encoded MD5 hash of the file attached to this post.
-        filename (string): Original name of the file attached to this post.
-        file_url (string): URL of the file attached to this post.
-        file_extension (string): Extension of the file attached to this post. Eg: ``png``, ``webm``, etc.
-        file_size (int): Size of the file attached to this post.
-        file_width (int): Width of the file attached to this post.
-        file_height (int): Height of the file attached to this post.
-        file_deleted (bool): Whether the file attached to this post was deleted after being posted.
-        thumbnail_width (int): Width of the thumbnail attached to this post.
-        thumbnail_height (int): Height of the thumbnail attached to this post.
-        thumbnail_fname (string): Filename of the thumbnail attached to this post.
-        thumbnail_url (string): URL of the thumbnail attached to this post.
+        first_file (:class:`py8chan.File`): The File object associated with this post.
         has_file (bool): Whether this post has a file attached to it.
         url (string): URL of this post.
         semantic_url (string): URL of this post, with the thread's 'semantic' component.
@@ -44,6 +32,10 @@ class Post(object):
         self._thread = thread
         self._data = data
         self._url = Url(board=self._thread._board.name, https=thread.https)		# 4chan URL generator
+
+        # add file objects if they exist
+        if self.has_file:
+            self.file1 = File(self, self._data)
 
     @property
     def is_op(self):
@@ -95,19 +87,23 @@ class Post(object):
     def datetime(self):
         return datetime.fromtimestamp(self._data['time'])
 
+    """
+        Legacy undocumented compatibility wrappers for File attributes that will be depreciated eventually. 
+        We strongly recommend users to use the `Post.file` property instead, which gives you a whole File object that has all the attributes.
+    """
     @property
     def file_md5(self):
         if not self.has_file:
             return None
 
-        return self._data['md5'].decode('base64')
+        return self.file1.file_md5
 
     @property
     def file_md5_hex(self):
         if not self.has_file:
             return None
 
-        return self.file_md5.encode('hex')
+        return self.file1.file_md5_hex
 
     @property
     def filename(self):
@@ -116,10 +112,7 @@ class Post(object):
 
         board = self._thread._board
         
-        return '%i%s' % (
-            self._data['tim'],
-            self._data['ext']
-        )
+        return self.file1.filename
 
     @property
     def file_url(self):
@@ -127,69 +120,71 @@ class Post(object):
             return None
 
         board = self._thread._board
-        return self._url.file_url(
-            self._data['tim'],
-            self._data['ext']
-        )
+        return self.file1.file_url
 
     @property
     def file_extension(self):
-        return self._data.get('ext')
+        return self.file1.file_extension
 
     @property
     def file_size(self):
-        return self._data.get('fsize')
+        return self.file1.file_size
 
     @property
     def file_width(self):
-        return self._data.get('w')
+        return self.file1.file_width
 
     @property
     def file_height(self):
-        return self._data.get('h')
+        return self.file1.file_width
 
     @property
     def file_deleted(self):
-        return self._data.get('filedeleted') == 1
+        return self.file1.file_deleted
 
     @property
     def thumbnail_width(self):
-        return self._data.get('tn_w')
+        return self.file1.thumbnail_width
 
     @property
     def thumbnail_height(self):
-        return self._data.get('tn_h')
+        return self.thumbnail_height
 
     @property
     def thumbnail_fname(self):
         if not self.has_file:
             return None
 
-        board = self._thread._board
-
-        return '%is.jpg' % (
-            self._data['tim']
-        )
+        return self.file1.thumbnail_fname
 
     @property
     def thumbnail_url(self):
         if not self.has_file:
             return None
 
-        board = self._thread._board
-        return self._url.thumb_url(
-            self._data['tim']
-        )
-
-    @property
-    def has_file(self):
-        return 'filename' in self._data
+        return self.file1.thumbnail_url
 
     def file_request(self):
         return self._thread._board._requests_session.get(self.file_url)
 
     def thumbnail_request(self):
         return self._thread._board._requests_session.get(self.thumbnail_url)
+
+    """New File object properties."""
+    @property
+    def file(self):
+        """
+            Returns the File object associated with this post. 
+            Currently 4chan only supports one file per post, but 8chan supports multiple,
+        """
+        if not self.has_file:
+            return None
+        
+        return self.file1
+
+    @property
+    def has_file(self):
+        return 'filename' in self._data
 
     @property
     def url(self):
