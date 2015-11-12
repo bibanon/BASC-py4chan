@@ -34,11 +34,16 @@ Here is a sample application that grabs and prints :class:`basc_py4chan.Thread` 
     print('Postnumber', topic.post_number)
     print('Timestamp', topic.timestamp)
     print('Datetime', repr(topic.datetime))
-    print('Filemd5hex', topic.file_md5_hex)
-    print('Fileurl', topic.file_url)
     print('Subject', topic.subject)
     print('Comment', topic.comment)
-    print('Thumbnailurl', topic.thumbnail_url)
+    
+    # file information
+    for f in first_thread.file_objects():
+        print('Filename', f.filename)
+        print('  Filemd5hex', f.file_md5_hex)
+        print('  Fileurl', f.file_url)
+        print('  Thumbnailurl', f.thumbnail_url)
+        print()
 
 Basic Usage
 -----------
