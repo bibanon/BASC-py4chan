@@ -92,7 +92,7 @@ class Board(object):
         self._board_name = board_name
         self._https = https
         self._protocol = 'https://' if https else 'http://'
-        self._url = Url(board=board_name, https=self._https)
+        self._url = Url(board_name=board_name, https=self._https)
 
         self._requests_session = session or requests.session()
         self._requests_session.headers['User-Agent'] = 'py-4chan/%s' % __version__
