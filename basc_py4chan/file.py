@@ -32,7 +32,7 @@ class File(object):
     def __init__(self, post, data):
         self._post = post
         self._data = data
-        self._url = Url(board=self._post._thread._board.name, https=self._post._thread._board.https)       # 8chan URL generator
+        self._url = Url(board_name=self._post._thread._board.name, https=self._post._thread._board.https)       # 4chan URL generator
 
     @property
     def file_md5(self):
