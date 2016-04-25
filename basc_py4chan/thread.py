@@ -21,7 +21,7 @@ class Thread(object):
     """
     def __init__(self, board, id):
         self._board = board
-        self._url = Url(board=board.name, https=board.https)       # 4chan URL generator
+        self._url = Url(board_name=board.name, https=board.https)       # 4chan URL generator
         self.id = self.number = self.num = self.no = id
         self.topic = None
         self.replies = []
