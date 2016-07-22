@@ -15,7 +15,8 @@ class File(object):
     Attributes:
         file_md5 (string): MD5 hash of the file attached to this post.
         file_md5_hex (string): Hex-encoded MD5 hash of the file attached to this post.
-        filename (string): Original name of the file attached to this post.
+        filename (string): Name of the file attached to this post.
+        filename_original (string): Original name of the file attached to this post.
         file_url (string): URL of the file attached to this post.
         file_extension (string): Extension of the file attached to this post. Eg: ``png``, ``webm``, etc.
         file_size (int): Size of the file attached to this post.
@@ -31,7 +32,7 @@ class File(object):
     def __init__(self, post, data):
         self._post = post
         self._data = data
-        self._url = Url(board=self._post._thread._board.name, https=self._post._thread._board.https)       # 8chan URL generator
+        self._url = Url(board_name=self._post._thread._board.name, https=self._post._thread._board.https)       # 4chan URL generator
 
     @property
     def file_md5(self):
@@ -49,6 +50,13 @@ class File(object):
     def filename(self):
         return '%s%s' % (
             self._data['tim'],
+            self._data['ext']
+        )
+
+    @property
+    def filename_original(self):
+        return '%s%s' % (
+            self._data['filename'],
             self._data['ext']
         )
 
