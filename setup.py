@@ -17,7 +17,7 @@ from setuptools import setup
 
 setup(
     name='BASC-py4chan',
-    version='0.6.0',
+    version='0.6.1',
     description=("Python 4chan API Wrapper. Improved version of Edgeworth's "
                  "original py-4chan wrapper."),
     long_description=open('README.rst').read(),
