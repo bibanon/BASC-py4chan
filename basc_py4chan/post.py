@@ -31,7 +31,7 @@ class Post(object):
     def __init__(self, thread, data):
         self._thread = thread
         self._data = data
-        self._url = Url(board=self._thread._board.name, https=thread.https)		# 4chan URL generator
+        self._url = Url(board_name=self._thread._board.name, https=thread.https)		# 4chan URL generator
 
         # add file objects if they exist
         if self.has_file:
