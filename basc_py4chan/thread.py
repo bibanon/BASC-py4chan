@@ -12,6 +12,7 @@ class Thread(object):
         sticky (bool): Whether this thread is a 'sticky'.
         archived (bool): Whether the thread has been archived.
         bumplimit (bool): Whether the thread has hit the bump limit.
+        imagelimit (bool): Whether the thread has hit the image limit.
         topic (:class:`basc_py4chan.Post`): Topic post of the thread, the OP.
         posts (list of :class:`basc_py4chan.Post`): List of all posts in the thread, including the OP.
         all_posts (list of :class:`basc_py4chan.Post`): List of all posts in the thread, including the OP and any omitted posts.
@@ -50,6 +51,10 @@ class Thread(object):
     @property
     def archived(self):
         return self.topic._data.get('archived') == 1
+
+    @property
+    def imagelimit(self):
+        return self.topic._data.get('imagelimit') == 1
 
     @property
     def bumplimit(self):
