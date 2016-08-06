@@ -19,7 +19,8 @@ class Post(object):
         comment (string): This comment, with the <wbr> tag removed.
         html_comment (string): Original, direct HTML of this comment.
         text_comment (string): Plaintext version of this comment.
-        is_op (bool): Whether this is the OP (first post of the thread)
+        is_op (bool): Whether this is the OP (first post of the thread).
+        spoiler (bool): Whether the attached file is spoiled.
         timestamp (int): Unix timestamp for this post.
         datetime (:class:`datetime.datetime`): Datetime time of this post.
         first_file (:class:`py8chan.File`): The File object associated with this post.
@@ -86,6 +87,10 @@ class Post(object):
     @property
     def datetime(self):
         return datetime.fromtimestamp(self._data['time'])
+
+    @property
+    def spoiler(self):
+        return self._data.get('spoiler') == 1
 
     """
         Legacy undocumented compatibility wrappers for File attributes that will be depreciated eventually. 
