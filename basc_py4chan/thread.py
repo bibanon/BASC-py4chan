@@ -63,7 +63,7 @@ class Thread(object):
 
     @property
     def custom_spoiler(self):
-        return self.topic._data.get('custom_spoiler')
+        return self.topic._data.get('custom_spoiler', 0)
 
     @classmethod
     def _from_request(cls, board, res, id):
