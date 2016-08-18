@@ -25,8 +25,10 @@ class Thread(object):
         self._board = board
         self._url = Url(board_name=board.name, https=board.https)       # 4chan URL generator
         self.id = self.number = self.num = self.no = id
-        self.topic = None
+        self.topic = self.op = None
         self.replies = []
+        self.num_replies = 0
+        self.num_images = 0
         self.is_404 = False
         self.last_reply_id = 0
         self.omitted_posts = 0
