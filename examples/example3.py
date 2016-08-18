@@ -1,8 +1,9 @@
 # credits to Anarov for improved example.py
 from __future__ import print_function
+
 import basc_py4chan
 
-b = basc_py4chan.Board('b')
+b = basc_py4chan.get_board('b')
 threads = b.get_threads()
 print("Got %i threads" % len(threads))
 first_thread = threads[0]

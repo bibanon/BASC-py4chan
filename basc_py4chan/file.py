@@ -28,7 +28,7 @@ class File(object):
         thumbnail_fname (string): Filename of the thumbnail attached to this post.
         thumbnail_url (string): URL of the thumbnail attached to this post.
     """
-    
+
     def __init__(self, post, data):
         self._post = post
         self._data = data
@@ -41,7 +41,7 @@ class File(object):
         # More info: http://stackoverflow.com/a/16033232
         # returns a bytestring
         return b64decode(self._data['md5'])
-        
+
     @property
     def file_md5_hex(self):
         return hexlify(self.file_md5).decode('ascii')
@@ -108,12 +108,12 @@ class File(object):
             self._data['tim']
         )
 
-    def file_request(self):
-        return self._post._thread._board._requests_session.get(self.file_url)
+    def file_request(self, timeout=None):
+        return self._post._thread._board._requests_session.get(self.file_url, timeout=timeout)
 
-    def thumbnail_request(self):
-        return self._post._thread._board._requests_session.get(self.thumbnail_url)
-        
+    def thumbnail_request(self, timeout=None):
+        return self._post._thread._board._requests_session.get(self.thumbnail_url, timeout=timeout)
+
     def __repr__(self):
         return '<File %s from Post /%s/%i#%i>' % (
             self.filename,

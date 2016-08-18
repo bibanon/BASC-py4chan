@@ -144,7 +144,7 @@ class Thread(object):
             if reply.has_file:
                 yield reply.file
 
-    def update(self, force=False):
+    def update(self, force=False, timeout=None):
         """Fetch new posts from the server.
 
         Arguments:
@@ -165,7 +165,7 @@ class Thread(object):
 
         # random connection errors, just return 0 and try again later
         try:
-            res = self._board._requests_session.get(self._api_url, headers=headers)
+            res = self._board._requests_session.get(self._api_url, headers=headers, timeout=timeout)
         except:
             # try again later
             return 0
@@ -215,10 +215,10 @@ class Thread(object):
         else:
             res.raise_for_status()
 
-    def expand(self):
+    def expand(self, timeout=None):
         """If there are omitted posts, update to include all posts."""
         if self.omitted_posts > 0:
-            self.update()
+            self.update(timeout=timeout)
 
     @property
     def posts(self):

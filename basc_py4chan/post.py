@@ -169,11 +169,11 @@ class Post(object):
 
         return self.file1.thumbnail_url
 
-    def file_request(self):
-        return self._thread._board._requests_session.get(self.file_url)
+    def file_request(self, timeout=None):
+        return self._thread._board._requests_session.get(self.file_url, timeout)
 
-    def thumbnail_request(self):
-        return self._thread._board._requests_session.get(self.thumbnail_url)
+    def thumbnail_request(self, timeout=None):
+        return self._thread._board._requests_session.get(self.thumbnail_url, timeout)
 
     """New File object properties."""
     @property
