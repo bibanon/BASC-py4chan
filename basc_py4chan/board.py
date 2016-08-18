@@ -54,7 +54,7 @@ def get_boards(board_name_list, timeout=None, *board_args, **board_kwargs):
         dict of :class:`basc_py4chan._Board`: Requested boards.
     """
     # Use https based on how the Board class instances are to be instantiated
-    https = board_kwargs.get('https', board_args[1] if len(board_args) > 1 else False)
+    https = board_kwargs.get('https', board_args[0] if board_args else False)
 
     # Dummy URL generator, only used to generate the board list which doesn't
     # require a valid board name
