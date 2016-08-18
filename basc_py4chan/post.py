@@ -38,6 +38,8 @@ class Post(object):
         if self.has_file:
             self.file1 = File(self, self._data)
 
+        self.deleted = False
+
     @property
     def is_op(self):
         return self == self.thread.topic

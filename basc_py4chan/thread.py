@@ -204,12 +204,24 @@ class Thread(object):
                 self.replies[:] = [Post(self, p) for p in posts[1:]]
 
             new_post_count = len(self.replies)
+
+            # Update replies to indicate if they or their files were deleted. The topic itself is already updated,
+            # because it's newly instantiated each time.
+            old_replies = {p.post_id: p for p in self.replies}
+            new_replies = {p.post_id: p for p in (Post(self, p) for p in posts[1:])}
+            for post_id, post in old_replies.items():
+                if post_id not in new_replies:
+                    post.deleted = True
+                    new_post_count -= 1
+                    continue
+                if 'filedeleted' in post._data:
+                    post._data['filedeleted'] = new_replies[post_id]._data['filedeleted']
+
             post_count_delta = new_post_count - original_post_count
             if not post_count_delta:
                 return 0
 
             self.last_reply_id = self.replies[-1].post_number
-
             return post_count_delta
 
         else:
