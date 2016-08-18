@@ -44,7 +44,7 @@ class Post(object):
 
     @property
     def is_op(self):
-        return self == self.thread.topic
+        return self == self._thread.topic
 
     is_OP = is_op
 
