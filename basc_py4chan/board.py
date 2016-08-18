@@ -89,6 +89,7 @@ class _Board(object):
         page_count (int): How many pages this board has.
         threads_per_page (int): How many threads there are on each page.
     """
+
     def __init__(self, board_name, https=False, session=None):
         """Creates a :mod:`basc_py4chan.Board` object.
 

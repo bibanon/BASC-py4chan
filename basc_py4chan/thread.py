@@ -21,9 +21,10 @@ class Thread(object):
         semantic_url (string): URL of the thread, with the semantic slug.
         semantic_slug (string): The 'pretty URL slug' assigned to this thread by 4chan.
     """
+
     def __init__(self, board, id):
         self._board = board
-        self._url = Url(board_name=board.name, https=board.https)       # 4chan URL generator
+        self._url = Url(board_name=board.name, https=board.https)  # 4chan URL generator
         self.id = self.number = self.num = self.no = id
         self.topic = self.op = None
         self.replies = []
@@ -214,6 +215,8 @@ class Thread(object):
                     post.deleted = True
                     new_post_count -= 1
                     continue
+
+                # Only file deleted can actually change for regular replies
                 if 'filedeleted' in post._data:
                     post._data['filedeleted'] = new_replies[post_id]._data['filedeleted']
 
