@@ -109,10 +109,10 @@ class File(object):
         )
 
     def file_request(self):
-        return self._thread._board._requests_session.get(self.file_url)
+        return self._post._thread._board._requests_session.get(self.file_url)
 
     def thumbnail_request(self):
-        return self._thread._board._requests_session.get(self.thumbnail_url)
+        return self._post._thread._board._requests_session.get(self.thumbnail_url)
         
     def __repr__(self):
         return '<File %s from Post /%s/%i#%i>' % (
