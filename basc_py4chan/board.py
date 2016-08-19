@@ -289,6 +289,3 @@ class _Board(object):
 
     def __repr__(self):
         return '<Board /%s/>' % self.name
-
-
-board = _Board
