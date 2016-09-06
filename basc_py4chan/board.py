@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import math
+
 import requests
 
 from . import __version__
@@ -245,11 +247,10 @@ class _Board(object):
         ids = [thread['no'] for page in json for thread in page['threads']]
 
         # Update current page for all cached threads
-        count = len(ids)
-        for id_ in ids:
+        for index, id_ in enumerate(ids, start=1):
             thread = self._thread_cache.get(id_)
             if thread:
-                thread.page = count // self.threads_per_page
+                thread.page = math.ceil(index / self.threads_per_page)
 
         return ids
 
