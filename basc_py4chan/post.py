@@ -216,3 +216,6 @@ class Post(object):
             self.post_number,
             self.has_file
         )
+
+    def __lt__(self, other):
+        return self.post_id < other.post_id

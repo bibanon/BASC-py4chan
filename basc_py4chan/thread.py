@@ -280,3 +280,6 @@ class Thread(object):
         return '<Thread /%s/%i, %i replies%s>' % (
             self._board.name, self.id, len(self.replies), extra
         )
+
+    def __lt__(self, other):
+        return self.id < other.id
