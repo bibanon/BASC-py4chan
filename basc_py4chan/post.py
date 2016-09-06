@@ -29,6 +29,7 @@ class Post(object):
         url (string): URL of this post.
         semantic_url (string): URL of this post, with the thread's 'semantic' component.
         semantic_slug (string): This post's 'semantic slug'.
+        deleted (bool): Whether this post was deleted.
     """
 
     def __init__(self, thread, data):

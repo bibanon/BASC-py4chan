@@ -212,7 +212,13 @@ class _Board(object):
             list of :mod:`basc_py4chan.Thread`: List of Thread objects representing the threads on the given page.
         """
         url = self._url.page_url(page)
-        return self._request_threads(url, timeout)
+        threads = self._request_threads(url, timeout)
+
+        # Set page information as soon as available
+        for thread in threads:
+            thread.page = page
+
+        return threads
 
     def get_all_thread_ids(self, timeout=None):
         """Return the ID of every thread on this board.
@@ -221,7 +227,16 @@ class _Board(object):
             list of ints: List of IDs of every thread on this board.
         """
         json = self._get_json(self._url.thread_list(), timeout)
-        return [thread['no'] for page in json for thread in page['threads']]
+        ids = [thread['no'] for page in json for thread in page['threads']]
+
+        # Update current page for all cached threads
+        count = len(ids)
+        for id_ in ids:
+            thread = self._thread_cache.get(id_)
+            if thread:
+                thread.page = count // self.threads_per_page
+
+        return ids
 
     def get_all_threads(self, expand=False, timeout=None):
         """Return every thread on this board.
