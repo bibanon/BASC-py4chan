@@ -20,8 +20,7 @@ class Thread(object):
         url (string): URL of the thread, not including semantic slug.
         semantic_url (string): URL of the thread, with the semantic slug.
         semantic_slug (string): The 'pretty URL slug' assigned to this thread by 4chan.
-        page (int): Page the thread was last seen on.
-        current_page (int): Page the thread is currently on (forces an update to `page` by requesting all thread IDs).
+        page (int): Page the thread was last seen on. Retrieve the current page using `get_current_page`.
     """
 
     def __init__(self, board, id):
@@ -72,9 +71,8 @@ class Thread(object):
         return self.topic._data.get('custom_spoiler', 0)
 
     # Force update to last seen page by calling get_all_thread_ids() on the underlying board instance
-    @property
-    def current_page(self):
-        self._board.get_all_thread_ids()
+    def get_current_page(self, timeout=None):
+        self._board.get_all_thread_ids(timeout)
         return self.page
 
     @classmethod
