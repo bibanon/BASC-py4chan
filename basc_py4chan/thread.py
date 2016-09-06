@@ -20,17 +20,22 @@ class Thread(object):
         url (string): URL of the thread, not including semantic slug.
         semantic_url (string): URL of the thread, with the semantic slug.
         semantic_slug (string): The 'pretty URL slug' assigned to this thread by 4chan.
+        page (int): Page the thread was last seen on. Retrieve the current page using `get_current_page`.
     """
+
     def __init__(self, board, id):
         self._board = board
-        self._url = Url(board_name=board.name, https=board.https)       # 4chan URL generator
+        self._url = Url(board_name=board.name, https=board.https)  # 4chan URL generator
         self.id = self.number = self.num = self.no = id
-        self.topic = None
+        self.topic = self.op = None
         self.replies = []
+        self.num_replies = 0
+        self.num_images = 0
         self.is_404 = False
         self.last_reply_id = 0
         self.omitted_posts = 0
         self.omitted_images = 0
+        self.page = 0
         self.want_update = False
         self._last_modified = None
 
@@ -64,6 +69,11 @@ class Thread(object):
     @property
     def custom_spoiler(self):
         return self.topic._data.get('custom_spoiler', 0)
+
+    # Force update to last seen page by calling get_all_thread_ids() on the underlying board instance
+    def get_current_page(self, timeout=None):
+        self._board.get_all_thread_ids(timeout)
+        return self.page
 
     @classmethod
     def _from_request(cls, board, res, id):
@@ -142,11 +152,12 @@ class Thread(object):
             if reply.has_file:
                 yield reply.file
 
-    def update(self, force=False):
+    def update(self, force=False, timeout=None):
         """Fetch new posts from the server.
 
         Arguments:
             force (bool): Force a thread update, even if thread has 404'd.
+            timeout (tuple): A tuple of floats containing the request connect- and read-timeout.
 
         Returns:
             int: How many new posts have been fetched.
@@ -163,7 +174,7 @@ class Thread(object):
 
         # random connection errors, just return 0 and try again later
         try:
-            res = self._board._requests_session.get(self._api_url, headers=headers)
+            res = self._board._requests_session.get(self._api_url, headers=headers, timeout=timeout)
         except:
             # try again later
             return 0
@@ -202,21 +213,35 @@ class Thread(object):
                 self.replies[:] = [Post(self, p) for p in posts[1:]]
 
             new_post_count = len(self.replies)
+
+            # Update replies to indicate if they or their files were deleted. The topic itself is already updated,
+            # because it's newly instantiated each time.
+            old_replies = {p.post_id: p for p in self.replies}
+            new_replies = {p.post_id: p for p in (Post(self, p) for p in posts[1:])}
+            for post_id, post in old_replies.items():
+                if post_id not in new_replies:
+                    post.deleted = True
+                    new_post_count -= 1
+                    continue
+
+                # Only file deleted can actually change for regular replies
+                if 'filedeleted' in post._data:
+                    post._data['filedeleted'] = new_replies[post_id]._data['filedeleted']
+
             post_count_delta = new_post_count - original_post_count
             if not post_count_delta:
                 return 0
 
             self.last_reply_id = self.replies[-1].post_number
-
             return post_count_delta
 
         else:
             res.raise_for_status()
 
-    def expand(self):
+    def expand(self, timeout=None):
         """If there are omitted posts, update to include all posts."""
         if self.omitted_posts > 0:
-            self.update()
+            self.update(timeout=timeout)
 
     @property
     def posts(self):
@@ -253,3 +278,6 @@ class Thread(object):
         return '<Thread /%s/%i, %i replies%s>' % (
             self._board.name, self.id, len(self.replies), extra
         )
+
+    def __lt__(self, other):
+        return self.id < other.id

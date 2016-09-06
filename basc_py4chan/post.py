@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 
-from .url import Url
 from .file import File
+from .url import Url
 from .util import clean_comment_body
+
 
 class Post(object):
     """Represents a 4chan post.
@@ -28,24 +29,30 @@ class Post(object):
         url (string): URL of this post.
         semantic_url (string): URL of this post, with the thread's 'semantic' component.
         semantic_slug (string): This post's 'semantic slug'.
+        deleted (bool): Whether this post was deleted.
     """
+
     def __init__(self, thread, data):
         self._thread = thread
         self._data = data
-        self._url = Url(board_name=self._thread._board.name, https=thread.https)		# 4chan URL generator
+        self._url = Url(board_name=self._thread._board.name, https=thread.https)  # 4chan URL generator
 
         # add file objects if they exist
         if self.has_file:
             self.file1 = File(self, self._data)
 
+        self.deleted = False
+
     @property
     def is_op(self):
-        return self == self.thread.topic
+        return self == self._thread.topic
+
     is_OP = is_op
 
     @property
     def post_id(self):
         return self._data.get('no')
+
     number = num = no = post_number = post_id
 
     @property
@@ -96,6 +103,7 @@ class Post(object):
         Legacy undocumented compatibility wrappers for File attributes that will be depreciated eventually. 
         We strongly recommend users to use the `Post.file` property instead, which gives you a whole File object that has all the attributes.
     """
+
     @property
     def file_md5(self):
         if not self.has_file:
@@ -115,8 +123,6 @@ class Post(object):
         if not self.has_file:
             return None
 
-        board = self._thread._board
-        
         return self.file1.filename
 
     @property
@@ -124,7 +130,6 @@ class Post(object):
         if not self.has_file:
             return None
 
-        board = self._thread._board
         return self.file1.file_url
 
     @property
@@ -169,13 +174,14 @@ class Post(object):
 
         return self.file1.thumbnail_url
 
-    def file_request(self):
-        return self._thread._board._requests_session.get(self.file_url)
+    def file_request(self, timeout=None):
+        return self._thread._board._requests_session.get(self.file_url, timeout)
 
-    def thumbnail_request(self):
-        return self._thread._board._requests_session.get(self.thumbnail_url)
+    def thumbnail_request(self, timeout=None):
+        return self._thread._board._requests_session.get(self.thumbnail_url, timeout)
 
     """New File object properties."""
+
     @property
     def file(self):
         """
@@ -184,7 +190,7 @@ class Post(object):
         """
         if not self.has_file:
             return None
-        
+
         return self.file1
 
     @property
@@ -210,3 +216,6 @@ class Post(object):
             self.post_number,
             self.has_file
         )
+
+    def __lt__(self, other):
+        return self.post_id < other.post_id

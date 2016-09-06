@@ -7,23 +7,23 @@ class Url(object):
     def __init__(self, board_name, https=False):
         self._board_name = board_name
         self._protocol = 'https://' if https else 'http://'
-        
+
         # 4chan API URL Subdomains
         DOMAIN = {
-            'api': self._protocol + 'a.4cdn.org',   # API subdomain
-            'boards': self._protocol + 'boards.4chan.org', # HTML subdomain
+            'api': self._protocol + 'a.4cdn.org',  # API subdomain
+            'boards': self._protocol + 'boards.4chan.org',  # HTML subdomain
             'file': self._protocol + 'i.4cdn.org',  # file (image) host
-            'thumbs': self._protocol + 'i.4cdn.org',# thumbs host
-            'static': self._protocol + 's.4cdn.org' # static host
+            'thumbs': self._protocol + 'i.4cdn.org',  # thumbs host
+            'static': self._protocol + 's.4cdn.org'  # static host
         }
-        
+
         # 4chan API URL Templates
         TEMPLATE = {
             'api': {  # URL structure templates
                 'board': DOMAIN['api'] + '/{board}/{page}.json',
                 'thread': DOMAIN['api'] + '/{board}/thread/{thread_id}.json'
             },
-            'http': { # Standard HTTP viewing URLs
+            'http': {  # Standard HTTP viewing URLs
                 'board': DOMAIN['boards'] + '/{board}/{page}.json',
                 'thread': DOMAIN['boards'] + '/{board}/thread/{thread_id}'
             },
@@ -33,7 +33,7 @@ class Url(object):
                 'static': DOMAIN['static'] + '/image/{item}'
             }
         }
-        
+
         # 4chan API Listings
         LISTING = {
             'board_list': DOMAIN['api'] + '/boards.json',
@@ -41,7 +41,7 @@ class Url(object):
             'archived_thread_list': DOMAIN['api'] + '/{board}/archive.json',
             'catalog': DOMAIN['api'] + '/{board}/catalog.json'
         }
-        
+
         # combine all dictionaries into self.URL dictionary
         self.URL = TEMPLATE
         self.URL.update({'domain': DOMAIN})
@@ -56,39 +56,39 @@ class Url(object):
         return self.URL['api']['board'].format(
             board=self._board_name,
             page=page
-            )
+        )
 
     # generate catalog URL
     def catalog(self):
         return self.URL['listing']['catalog'].format(
             board=self._board_name
-            )
+        )
 
     # generate threads listing URL
     def thread_list(self):
         return self.URL['listing']['thread_list'].format(
             board=self._board_name
-            )
+        )
 
-#    # generate archived threads list URL (disabled for compatibility)
-#    def archived_thread_list(self):
-#        return self.URL['listing']['archived_thread_list'].format(
-#            board=self._board_name
-#            )
+    #    # generate archived threads list URL (disabled for compatibility)
+    #    def archived_thread_list(self):
+    #        return self.URL['listing']['archived_thread_list'].format(
+    #            board=self._board_name
+    #            )
 
     # generate API thread URL
     def thread_api_url(self, thread_id):
         return self.URL['api']['thread'].format(
             board=self._board_name,
             thread_id=thread_id
-            )
+        )
 
     # generate HTTP thread URL
     def thread_url(self, thread_id):
         return self.URL['http']['thread'].format(
             board=self._board_name,
             thread_id=thread_id
-            )
+        )
 
     # generate file URL
     def file_url(self, tim, ext):
@@ -96,19 +96,20 @@ class Url(object):
             board=self._board_name,
             tim=tim,
             ext=ext
-            )
+        )
 
     # generate thumb URL
     def thumb_url(self, tim):
         return self.URL['data']['thumbs'].format(
             board=self._board_name,
             tim=tim
-            )
+        )
 
     # return entire URL dictionary
     @property
     def site_urls(self):
         return self.URL
+
 
 """
 # 4chan Static Data (Unique to 4chan, needs implementation)

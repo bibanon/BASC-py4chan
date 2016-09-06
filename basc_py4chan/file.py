@@ -1,9 +1,11 @@
 # brand new class to handle 8chan/vichan's multiple files per post
 # supersedes py4chan's file generators in Thread and Post
 
-from .url import Url
 from base64 import b64decode
 from binascii import hexlify
+
+from .url import Url
+
 
 class File(object):
     """ Represents File objects and their thumbnails.
@@ -28,20 +30,21 @@ class File(object):
         thumbnail_fname (string): Filename of the thumbnail attached to this post.
         thumbnail_url (string): URL of the thumbnail attached to this post.
     """
-    
+
     def __init__(self, post, data):
         self._post = post
         self._data = data
-        self._url = Url(board_name=self._post._thread._board.name, https=self._post._thread._board.https)       # 4chan URL generator
+        # 4chan URL generator
+        self._url = Url(board_name=self._post._thread._board.name, https=self._post._thread._board.https)
 
     @property
     def file_md5(self):
         # Py 2/3 compatible equivalent of:
-        #return self._data['md5'].decode('base64')
+        # return self._data['md5'].decode('base64')
         # More info: http://stackoverflow.com/a/16033232
         # returns a bytestring
         return b64decode(self._data['md5'])
-        
+
     @property
     def file_md5_hex(self):
         return hexlify(self.file_md5).decode('ascii')
@@ -103,17 +106,16 @@ class File(object):
 
     @property
     def thumbnail_url(self):
-        board = self._post._thread._board
         return self._url.thumb_url(
             self._data['tim']
         )
 
-    def file_request(self):
-        return self._thread._board._requests_session.get(self.file_url)
+    def file_request(self, timeout=None):
+        return self._post._thread._board._requests_session.get(self.file_url, timeout=timeout)
 
-    def thumbnail_request(self):
-        return self._thread._board._requests_session.get(self.thumbnail_url)
-        
+    def thumbnail_request(self, timeout=None):
+        return self._post._thread._board._requests_session.get(self.thumbnail_url, timeout=timeout)
+
     def __repr__(self):
         return '<File %s from Post /%s/%i#%i>' % (
             self.filename,
