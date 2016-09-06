@@ -40,15 +40,12 @@ def _get_board_metadata(url_generator, board, key, timeout):
     return _metadata[board][key]
 
 
-def get_board(name, timeout=None, *board_args, **board_kwargs):
-    return get_boards([name], timeout, *board_args, **board_kwargs)[0]
-
-
 def get_boards(board_name_list, timeout=None, *board_args, **board_kwargs):
     """Given a list of boards, return :class:`basc_py4chan.Board` objects.
 
     Args:
         board_name_list (list): List of board names to get, eg: ['b', 'tg']
+        timeout (tuple): A tuple of floats containing the request connect- and read-timeout.
 
     Returns:
         dict of :class:`basc_py4chan._Board`: Requested boards.
@@ -72,10 +69,22 @@ def get_boards(board_name_list, timeout=None, *board_args, **board_kwargs):
 def get_all_boards(timeout=None, *board_args, **board_kwargs):
     """Returns every board on 4chan.
 
+    Args:
+        timeout (tuple): A tuple of floats containing the request connect- and read-timeout.
+
     Returns:
         dict of :class:`basc_py4chan._Board`: All boards.
     """
     return get_boards(_metadata.keys(), timeout, *board_args, **board_kwargs)
+
+
+def get_board(name, timeout=None, *board_args, **board_kwargs):
+    return get_boards([name], timeout, *board_args, **board_kwargs)[0]
+
+
+# For backwards-compatibility, see: https://github.com/bibanon/BASC-py4chan/pull/24#issuecomment-241407896
+def Board(board_name, https=False, session=None, timeout=None):
+    return get_board(board_name, timeout, https=https, session=session)
 
 
 class _Board(object):
@@ -125,6 +134,7 @@ class _Board(object):
             thread_id (int): Thread ID
             update_if_cached (bool): Whether the thread should be updated if it's already in our cache
             raise_404 (bool): Raise an Exception if thread has 404'd
+            timeout (tuple): A tuple of floats containing the request connect- and read-timeout.
 
         Returns:
             :class:`basc_py4chan.Thread`: Thread object
@@ -156,6 +166,7 @@ class _Board(object):
 
         Args:
             thread_id (int): Thread ID
+            timeout (tuple): A tuple of floats containing the request connect- and read-timeout.
 
         Returns:
             bool: Whether the given thread exists on this board.
@@ -207,6 +218,7 @@ class _Board(object):
 
         Args:
             page (int): Page to request threads for. Defaults to the first page.
+            timeout (tuple): A tuple of floats containing the request connect- and read-timeout.
 
         Returns:
             list of :mod:`basc_py4chan.Thread`: List of Thread objects representing the threads on the given page.
@@ -222,6 +234,9 @@ class _Board(object):
 
     def get_all_thread_ids(self, timeout=None):
         """Return the ID of every thread on this board.
+
+        Args:
+            timeout (tuple): A tuple of floats containing the request connect- and read-timeout.
 
         Returns:
             list of ints: List of IDs of every thread on this board.
@@ -252,6 +267,7 @@ class _Board(object):
         Args:
             expand (bool): Whether to download every single post of every thread.
                 If enabled, this option can be very slow and bandwidth-intensive.
+            timeout (tuple): A tuple of floats containing the request connect- and read-timeout.
 
         Returns:
             list of :mod:`basc_py4chan.Thread`: List of Thread objects representing every thread on this board.

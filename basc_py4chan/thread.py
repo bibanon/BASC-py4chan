@@ -159,6 +159,7 @@ class Thread(object):
 
         Arguments:
             force (bool): Force a thread update, even if thread has 404'd.
+            timeout (tuple): A tuple of floats containing the request connect- and read-timeout.
 
         Returns:
             int: How many new posts have been fetched.
