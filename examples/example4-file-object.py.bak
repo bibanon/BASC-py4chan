@@ -1,5 +1,5 @@
 # example4-extrafiles.py - get info about all files in first thread
-
+from __future__ import print_function
 import basc_py4chan
 
 def main():

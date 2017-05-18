@@ -41,8 +41,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'BASC-py4chan'
-copyright = '2014, Antonizoon (Lawrence Wu)'
+project = u'BASC-py4chan'
+copyright = u'2014, Antonizoon (Lawrence Wu)'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -193,8 +193,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'BASC-py4chan.tex', 'BASC-py4chan Documentation',
-   'Antonizoon (Lawrence Wu)', 'manual'),
+  ('index', 'BASC-py4chan.tex', u'BASC-py4chan Documentation',
+   u'Antonizoon (Lawrence Wu)', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -223,8 +223,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'basc-py4chan', 'BASC-py4chan Documentation',
-     ['Antonizoon (Lawrence Wu)'], 1)
+    ('index', 'basc-py4chan', u'BASC-py4chan Documentation',
+     [u'Antonizoon (Lawrence Wu)'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -237,8 +237,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'BASC-py4chan', 'BASC-py4chan Documentation',
-   'Antonizoon (Lawrence Wu)', 'BASC-py4chan', 'One line description of project.',
+  ('index', 'BASC-py4chan', u'BASC-py4chan Documentation',
+   u'Antonizoon (Lawrence Wu)', 'BASC-py4chan', 'One line description of project.',
    'Miscellaneous'),
 ]
 

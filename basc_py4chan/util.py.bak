@@ -8,7 +8,7 @@ import re
 try:
     from html.parser import HTMLParser
 except ImportError:
-    from html.parser import HTMLParser
+    from HTMLParser import HTMLParser
 
 _parser = HTMLParser()
 

@@ -12,19 +12,19 @@ _metadata = {}
 # compatibility layer for Python2's `basestring` variable
 # http://www.rfk.id.au/blog/entry/preparing-pyenchant-for-python-3/
 try:
-    str = str
+    unicode = unicode
 except NameError:
     # 'unicode' is undefined, must be Python 3
     str = str
-    str = str
+    unicode = str
     bytes = bytes
-    str = str, bytes
+    basestring = str, bytes
 else:
     # 'unicode' exists, must be Python 2
     str = str
-    str = str
+    unicode = unicode
     bytes = str
-    str = str
+    basestring = basestring
 
 
 def _fetch_boards_metadata(url_generator):
@@ -49,7 +49,7 @@ def get_boards(board_name_list, *args, **kwargs):
     Returns:
         dict of :class:`basc_py4chan.Board`: Requested boards.
     """
-    if isinstance(board_name_list, str):
+    if isinstance(board_name_list, basestring):
         board_name_list = board_name_list.split()
     return [Board(name, *args, **kwargs) for name in board_name_list]
 
@@ -67,7 +67,7 @@ def get_all_boards(*args, **kwargs):
     # require a valid board name
     url_generator = Url(None, https)
     _fetch_boards_metadata(url_generator)
-    return get_boards(list(_metadata.keys()), *args, **kwargs)
+    return get_boards(_metadata.keys(), *args, **kwargs)
 
 
 class Board(object):
@@ -240,7 +240,7 @@ class Board(object):
         thread_ids = self.get_all_thread_ids()
         threads = [self.get_thread(id, raise_404=False) for id in thread_ids]
 
-        return [_f for _f in threads if _f]
+        return filter(None, threads)
 
     def refresh_cache(self, if_want_update=False):
         """Update all threads currently stored in our cache."""

@@ -1,5 +1,5 @@
 # example6-download-thread.py - download json and all full-size images from a thread
-
+from __future__ import print_function
 import basc_py4chan
 import sys
 import os
