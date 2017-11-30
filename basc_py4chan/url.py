@@ -7,7 +7,7 @@ class Url(object):
     def __init__(self, board_name, https=False):
         self._board_name = board_name
         self._protocol = 'https://' if https else 'http://'
-        
+
         # 4chan API URL Subdomains
         DOMAIN = {
             'api': self._protocol + 'a.4cdn.org',   # API subdomain
@@ -17,7 +17,7 @@ class Url(object):
             'thumbs': self._protocol + 'i.4cdn.org',# thumbs host
             'static': self._protocol + 's.4cdn.org' # static host
         }
-        
+
         # 4chan API URL Templates
         TEMPLATE = {
             'api': {  # URL structure templates
@@ -34,7 +34,7 @@ class Url(object):
                 'static': DOMAIN['static'] + '/image/{item}'
             }
         }
-        
+
         # 4chan API Listings
         LISTING = {
             'board_list': DOMAIN['api'] + '/boards.json',
@@ -42,7 +42,7 @@ class Url(object):
             'archived_thread_list': DOMAIN['api'] + '/{board}/archive.json',
             'catalog': DOMAIN['api'] + '/{board}/catalog.json'
         }
-        
+
         # combine all dictionaries into self.URL dictionary
         self.URL = TEMPLATE
         self.URL.update({'domain': DOMAIN})
