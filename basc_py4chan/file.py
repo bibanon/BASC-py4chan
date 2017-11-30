@@ -1,17 +1,17 @@
 # brand new class to handle 8chan/vichan's multiple files per post
 # supersedes py4chan's file generators in Thread and Post
 
+# Fix by Partha Das. 30th November, 2017
+
 from .url import Url
 from base64 import b64decode
 from binascii import hexlify
 
 class File(object):
     """ Represents File objects and their thumbnails.
-    
     Constructor:
         post (py4chan.Post) - parent Post object.
         data (dict) - The post or extra_files dict from the 8chan API.
-    
     Attributes:
         file_md5 (string): MD5 hash of the file attached to this post.
         file_md5_hex (string): Hex-encoded MD5 hash of the file attached to this post.
@@ -28,7 +28,7 @@ class File(object):
         thumbnail_fname (string): Filename of the thumbnail attached to this post.
         thumbnail_url (string): URL of the thumbnail attached to this post.
     """
-    
+
     def __init__(self, post, data):
         self._post = post
         self._data = data
@@ -41,7 +41,7 @@ class File(object):
         # More info: http://stackoverflow.com/a/16033232
         # returns a bytestring
         return b64decode(self._data['md5'])
-        
+
     @property
     def file_md5_hex(self):
         return hexlify(self.file_md5).decode('ascii')
@@ -109,11 +109,15 @@ class File(object):
         )
 
     def file_request(self):
-        return self._thread._board._requests_session.get(self.file_url)
+        # return self._thread._board._requests_session.get(self.file_url)
+        # There is not instance in _thread, but is available in _post.
+        return self._post._thread._board._requests_session.get(self.file_url)
 
     def thumbnail_request(self):
-        return self._thread._board._requests_session.get(self.thumbnail_url)
-        
+        # return self._thread._board._requests_session.get(self.thumbnail_url)
+        # There is not instance in _thread, but is available in _post.
+        return self._post._thread._board._requests_session.get(self.thumbnail_url)
+
     def __repr__(self):
         return '<File %s from Post /%s/%i#%i>' % (
             self.filename,
