@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+# Fix by Partha Das. 30th November, 2017
 from datetime import datetime
 
 from .url import Url
@@ -40,8 +42,11 @@ class Post(object):
 
     @property
     def is_op(self):
-        return self == self.thread.topic
-    is_OP = is_op
+        # There is no member called thread, rather _thread
+        # return self == self.thread.topic
+        return self == self._thread.topic
+    # Isn't this redundant?
+    # is_OP = is_op
 
     @property
     def post_id(self):
@@ -114,9 +119,7 @@ class Post(object):
     def filename(self):
         if not self.has_file:
             return None
-
         board = self._thread._board
-        
         return self.file1.filename
 
     @property
@@ -179,12 +182,11 @@ class Post(object):
     @property
     def file(self):
         """
-            Returns the File object associated with this post. 
+            Returns the File object associated with this post.
             Currently 4chan only supports one file per post, but 8chan supports multiple,
         """
         if not self.has_file:
             return None
-        
         return self.file1
 
     @property
