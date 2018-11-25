@@ -56,9 +56,9 @@ Documentation is located `here <http://basc-py4chan.readthedocs.org/en/latest/in
 Extending this Library
 ----------------------
 
-There are a wealth of other imageboard APIs that have adopted a similar structure to the 4chan API (such as 8chan/vichan, or 420chan).
+There are a wealth of other imageboard APIs that have adopted a similar structure to the 4chan API (such as 8chan/vichan, or 420chan). FoolFuuka also has an API which differs significantly from them since it predates them, but it can be made to fit.
 
-So instead of writing a whole new class from scratch, you could inherit and override BASC-py4chan to support them. Here's how:
+So instead of writing a whole new class from scratch, you could inherit and override BASC-py4chan to support them. This would also allow the BASC-Archiver to possibly make it work. Here's how:
 
 .. code:: python
 

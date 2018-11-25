@@ -22,7 +22,7 @@ setup(
                  "original py-4chan wrapper."),
     long_description=open('README.rst').read(),
     license=open('LICENSE').read(),
-    author='Antonizoon (Antonizoon Overtwater)',
+    author='Antonizoon Overtwater',
     author_email='antonizoon@bibanon.org',
     url='http://github.com/bibanon/BASC-py4chan',
     packages=['basc_py4chan'],
