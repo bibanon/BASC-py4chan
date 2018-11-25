@@ -12,6 +12,7 @@ class Url(object):
         DOMAIN = {
             'api': self._protocol + 'a.4cdn.org',   # API subdomain
             'boards': self._protocol + 'boards.4chan.org', # HTML subdomain
+            'boards_4channel': self._protocol + 'boards.4channel.org', # HTML subdomain of 4channel worksafe, but 4chan.org still redirects
             'file': self._protocol + 'i.4cdn.org',  # file (image) host
             #'file': self._protocol + 'is.4chan.org', # new, slower image host
             'thumbs': self._protocol + 'i.4cdn.org',# thumbs host
@@ -25,7 +26,7 @@ class Url(object):
                 'thread': DOMAIN['api'] + '/{board}/thread/{thread_id}.json'
             },
             'http': { # Standard HTTP viewing URLs
-                'board': DOMAIN['boards'] + '/{board}/{page}.json',
+                'board': DOMAIN['boards'] + '/{board}/{page}',
                 'thread': DOMAIN['boards'] + '/{board}/thread/{thread_id}'
             },
             'data': {
