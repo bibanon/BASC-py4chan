@@ -4,9 +4,19 @@
 
 import re
 import html
+import sys
 
-_parser = html
+#HTML parser compat fix for python 3.9 and onwards
+if sys.version_info[0] == 3 and sys.version_info[1] >= 9:
+    _parser = html
+else:
+    # HTML parser was renamed in python 3.x
+    try:
+        from html.parser import HTMLParser
+    except ImportError:
+        from HTMLParser import HTMLParser
 
+    _parser = HTMLParser()
 
 def clean_comment_body(body):
     """Returns given comment HTML as plaintext.
