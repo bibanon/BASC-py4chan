@@ -3,12 +3,12 @@
 """Utility functions."""
 
 import re
-import html
 import sys
 
 #HTML parser compat fix for python 3.9 and onwards
 if sys.version_info[0] == 3 and sys.version_info[1] >= 9:
-    _parser = html
+    import html
+    _parser = html 
 else:
     # HTML parser was renamed in python 3.x
     try:
