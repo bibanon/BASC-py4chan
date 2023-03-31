@@ -19,7 +19,7 @@ Here's a short code snippet of us printing out how many threads are active on a 
     board = basc_py4chan.Board('tg')
     thread_ids = board.get_all_thread_ids()
     str_thread_ids = [str(id) for id in thread_ids]  # need to do this so str.join below works
-    print('There are', len(all_ids), 'active threads on /tg/:', ', '.join(str_thread_ids))
+    print('There are', len(thread_ids), 'active threads on /tg/:', ', '.join(str_thread_ids))
 
 
 Threads
@@ -40,10 +40,10 @@ For this example, we have a user ask us about "thread 1234", and we return infor
         print('Thread', thread_id)
         if thread.closed:
             print('  is closed')
-        if thread.sticky
+        if thread.sticky:
             print('  is a sticky')
 
         # information from the OP
         topic = thread.topic
         print('  is named:', topic.subject)
-        print('  and was made by:', name, email)
+        print('  and was made by:', topic.name, topic.email)
